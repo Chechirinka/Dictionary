@@ -16,8 +16,7 @@ public class Dictionaries {
     @Column(name = "value")
     private String value;
 
-    public Dictionaries() {
-    }
+    public Dictionaries() {}
 
     public Dictionaries(String key, String value) {
         this.key = key;

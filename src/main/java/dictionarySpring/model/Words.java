@@ -16,16 +16,18 @@ public class Words {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @Column(name = "word")
     private int word;
 
+    @Column(name = "lan_id")
+    private int lan_id;
+
+    public Words() {}
+    
     public Words(int word, int lan_id) {
         this.word = word;
         this.lan_id = lan_id;
     }
-
-    public Words() {}
-
-    private int lan_id;
 
     public int getWord() {
         return word;
