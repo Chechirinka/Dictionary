@@ -1,7 +1,7 @@
 package dictionarySpring.dao;
 
 import dictionarySpring.configuration.DictionaryType;
-import dictionarySpring.model.DictionaryLine;
+import dictionarySpring.model.Dictionaries;
 import dictionarySpring.storage.DictionaryStorage;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -20,10 +20,11 @@ public class DictionaryJpaHql implements DictionaryStorage {
 
     @Override
     @Transactional(readOnly = true)
-    public List<DictionaryLine> read(DictionaryType selectedDictionary) {
+    public List<Dictionaries> read(DictionaryType selectedDictionary) {
+
         Session session = sessionFactory.openSession();
 
-        List<DictionaryLine> dictionaryLines = session.createQuery("select d from DictionaryLine d", DictionaryLine.class)
+        List<Dictionaries> dictionaryLines = session.createQuery("select d from Dictionaries d", Dictionaries.class)
                 .getResultList();
 
         session.close();
@@ -43,9 +44,9 @@ public class DictionaryJpaHql implements DictionaryStorage {
 
     @Override
     @Transactional(readOnly = true)
-    public DictionaryLine search(String key, DictionaryType selectedDictionary) {
+    public Dictionaries search(String key, DictionaryType selectedDictionary) {
         Session session = sessionFactory.openSession();
 
-        return session.get(DictionaryLine.class, key);
+        return session.get(Dictionaries.class, key);
     }
 }

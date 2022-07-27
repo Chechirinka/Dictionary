@@ -1,6 +1,6 @@
 package dictionarySpring.service;
 
-import dictionarySpring.model.DictionaryLine;
+import dictionarySpring.model.Dictionaries;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -21,7 +21,7 @@ public class Formation {
      * @param dictionaryLine объект строк
      * @return строку
      */
-    public String castToString(DictionaryLine dictionaryLine) {
+    public String castToString(Dictionaries dictionaryLine) {
         return dictionaryLine.getKey() + splitCharView + dictionaryLine.getValue();
     }
 
@@ -31,9 +31,9 @@ public class Formation {
      * @param dictionaryLines список объектов строк
      * @return список строк
      */
-    public List<String> castToString(List<DictionaryLine> dictionaryLines) {
+    public List<String> castToString(List<Dictionaries> dictionaryLines) {
         List<String> lines = new ArrayList<>();
-        for (DictionaryLine dictionaryLine : dictionaryLines) {
+        for (Dictionaries dictionaryLine : dictionaryLines) {
             lines.add(castToString(dictionaryLine));
         }
         return lines;

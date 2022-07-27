@@ -1,7 +1,7 @@
 package dictionarySpring.service;
 
 import dictionarySpring.configuration.DictionaryType;
-import dictionarySpring.model.DictionaryLine;
+import dictionarySpring.model.Dictionaries;
 import dictionarySpring.storage.*;
 import dictionarySpring.validator.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,7 +66,7 @@ public class DictionaryService {
      * @param selectedDictionary выбранный язык словаря
      * @return строки из хранилища
      */
-    public List<DictionaryLine> readServiceRest(DictionaryType selectedDictionary) {
+    public List<Dictionaries> readServiceRest(DictionaryType selectedDictionary) {
         return dictionaryStorage.read(selectedDictionary);
     }
 
@@ -90,7 +90,7 @@ public class DictionaryService {
      */
     public String searchService(String key, DictionaryType selectedDictionary)
     {
-        final Optional<DictionaryLine> optionalReturn = Optional.ofNullable(dictionaryStorage.search(key, selectedDictionary));
+        final Optional<Dictionaries> optionalReturn = Optional.ofNullable(dictionaryStorage.search(key, selectedDictionary));
         if (optionalReturn.isEmpty()) {
             return NO_EXIST_KEY;
         }
@@ -108,7 +108,7 @@ public class DictionaryService {
      */
     public ResponseEntity<?> searchServiceRest(String key, DictionaryType selectedDictionary)
     {
-        final Optional<DictionaryLine> optionalReturn = Optional.ofNullable(dictionaryStorage.search(key, selectedDictionary));
+        final Optional<Dictionaries> optionalReturn = Optional.ofNullable(dictionaryStorage.search(key, selectedDictionary));
         if (optionalReturn.isEmpty()) {
             return new ResponseEntity<>(NO_EXIST_KEY, HttpStatus.BAD_REQUEST);
         }

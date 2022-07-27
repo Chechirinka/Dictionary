@@ -4,7 +4,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "dictline")
-public class DictionaryLine {
+public class Dictionaries {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,10 +16,10 @@ public class DictionaryLine {
     @Column(name = "value")
     private String value;
 
-    public DictionaryLine() {
+    public Dictionaries() {
     }
 
-    public DictionaryLine(String key, String value) {
+    public Dictionaries(String key, String value) {
         this.key = key;
         this.value = value;
     }
