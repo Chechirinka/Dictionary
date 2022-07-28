@@ -1,7 +1,7 @@
 package dictionarySpring.storage;
 
 import dictionarySpring.configuration.DictionaryType;
-import dictionarySpring.model.DictionaryLine;
+import dictionarySpring.model.Dictionaries;
 
 import java.util.List;
 
@@ -10,12 +10,12 @@ import java.util.List;
  */
 public interface DictionaryStorage {
 
-    List<DictionaryLine> read(DictionaryType selectedDictionary);
+    List<Dictionaries> read(DictionaryType selectedDictionary);
 
     boolean addTo(String key, String value, DictionaryType selectedDictionary);
 
     boolean remove(String key, DictionaryType selectedDictionary);
 
-    DictionaryLine search(String key, DictionaryType selectedDictionary);
+    Dictionaries search(String key, DictionaryType selectedDictionary);
 
 }

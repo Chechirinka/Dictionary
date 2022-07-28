@@ -1,7 +1,7 @@
 package dictionarySpring.storage;
 
 import dictionarySpring.configuration.DictionaryType;
-import dictionarySpring.model.DictionaryLine;
+import dictionarySpring.model.Dictionaries;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,7 +13,7 @@ import java.util.Map;
  */
 public class MapStorage implements DictionaryStorage {
 
-    private Map<String, DictionaryLine> map = new HashMap<>();
+    private Map<String, Dictionaries> map = new HashMap<>();
 
     /**
      * Метод, который отвечает за чтение данных из мапы
@@ -23,7 +23,7 @@ public class MapStorage implements DictionaryStorage {
      */
 
     @Override
-    public List<DictionaryLine> read(DictionaryType selectedDictionary) {
+    public List<Dictionaries> read(DictionaryType selectedDictionary) {
 
         return new ArrayList<>(map.values());
     }
@@ -38,7 +38,7 @@ public class MapStorage implements DictionaryStorage {
      */
     @Override
     public boolean addTo(String key, String value, DictionaryType selectedDictionary) {
-        map.put(key, new DictionaryLine(key, value));
+        map.put(key, new Dictionaries(key, value));
         return true;
     }
 
@@ -63,7 +63,7 @@ public class MapStorage implements DictionaryStorage {
      * @return mapRead - возвращает список пар <Ключ, Значение>
      */
     @Override
-    public DictionaryLine search(String key, DictionaryType selectedDictionary) {
+    public Dictionaries search(String key, DictionaryType selectedDictionary) {
         return map.get(key);
     }
 }

@@ -1,7 +1,7 @@
 package dictionarySpring.dao;
 
 import dictionarySpring.configuration.DictionaryType;
-import dictionarySpring.model.DictionaryLine;
+import dictionarySpring.model.Dictionaries;
 import dictionarySpring.storage.DictionaryStorage;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -17,8 +17,8 @@ public class DictionaryDAO implements DictionaryStorage {
     }
 
     @Override
-    public List<DictionaryLine> read(DictionaryType selectedDictionary) {
-        return jdbcTemplate.query("SELECT * FROM dictline", new BeanPropertyRowMapper<>(DictionaryLine.class));
+    public List<Dictionaries> read(DictionaryType selectedDictionary) {
+        return jdbcTemplate.query("SELECT * FROM dictline", new BeanPropertyRowMapper<>(Dictionaries.class));
     }
 
     @Override
@@ -34,9 +34,9 @@ public class DictionaryDAO implements DictionaryStorage {
     }
 
     @Override
-    public DictionaryLine search(String key, DictionaryType selectedDictionary) {
+    public Dictionaries search(String key, DictionaryType selectedDictionary) {
 
-        return jdbcTemplate.query("SELECT * FROM dictline WHERE key = ?", new Object[]{key}, new BeanPropertyRowMapper<>(DictionaryLine.class))
+        return jdbcTemplate.query("SELECT * FROM dictline WHERE key = ?", new Object[]{key}, new BeanPropertyRowMapper<>(Dictionaries.class))
                 .stream().findAny().orElse(null);
     }
 }

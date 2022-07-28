@@ -1,9 +1,7 @@
 package dictionarySpring.controllers;
 
 import dictionarySpring.configuration.DictionaryType;
-import dictionarySpring.dao.DictionaryDAO;
 import dictionarySpring.exception.TypeNotFoundException;
-import dictionarySpring.model.DictionaryLine;
 import dictionarySpring.service.DictionaryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
