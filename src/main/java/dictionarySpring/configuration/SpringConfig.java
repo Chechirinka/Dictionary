@@ -12,6 +12,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -22,10 +23,12 @@ import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring5.view.ThymeleafViewResolver;
 
 import javax.sql.DataSource;
+import java.util.Objects;
 
 @Configuration
 @ComponentScan("dictionarySpring")
 @PropertySource(value = "classpath:properties.yml")
+@PropertySource(value = "classpath:database.properties")
 @EnableWebMvc
 @Import({
         org.springdoc.webmvc.ui.SwaggerConfig.class,
@@ -37,14 +40,16 @@ import javax.sql.DataSource;
 public class SpringConfig implements WebMvcConfigurer {
 
     private final ApplicationContext applicationContext;
+    private final Environment env;
 
     private static final String MAP = "map";
     private static final String FILE = "file";
     private static final String DAO = "dao";
 
     @Autowired
-    public SpringConfig(ApplicationContext applicationContext) {
+    public SpringConfig(ApplicationContext applicationContext,  Environment env) {
         this.applicationContext = applicationContext;
+        this.env = env;
     }
 
     @Bean(name = "dictionaryFactory")
@@ -89,13 +94,24 @@ public class SpringConfig implements WebMvcConfigurer {
     public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
 
-        dataSource.setDriverClassName("org.postgresql.Driver");
-        dataSource.setUrl("jdbc:postgresql://localhost:5432/test");
-        dataSource.setUsername("postgres");
-        dataSource.setPassword("84zabira");
+        dataSource.setDriverClassName(Objects.requireNonNull(env.getProperty("driver")));
+        dataSource.setUrl(env.getProperty("url"));
+        dataSource.setUsername(env.getProperty("username"));
+        dataSource.setPassword(env.getProperty("password"));
 
         return dataSource;
     }
+
+//    public DataSource dataSource() {
+//        DriverManagerDataSource dataSource = new DriverManagerDataSource();
+//
+//        dataSource.setDriverClassName("org.postgresql.Driver");
+//        dataSource.setUrl("jdbc:postgresql://localhost:5432/test");
+//        dataSource.setUsername("postgres");
+//        dataSource.setPassword("84zabira");
+//
+//        return dataSource;
+//    }
 
     public JdbcTemplate jdbcTemplate() {
         return new JdbcTemplate(dataSource());
