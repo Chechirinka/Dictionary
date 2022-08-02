@@ -16,9 +16,41 @@ public class DictionaryDAO implements DictionaryStorage {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+ private static final String SEARCH = "SELECT key, value " +
+         "FROM( " +
+         "SELECT dictionaries.id AS m, words.word AS key, dictionaries.keys, languages.name AS lan_first " +
+         "FROM " +
+         "languages  JOIN words ON languages.id = words.lan_id " +
+         "JOIN dictionaries ON words.id = dictionaries.keys " +
+         ") AS a " +
+         "JOIN (SELECT dictionaries.id AS l, words.word AS value, dictionaries.values, languages.name As lan_second " +
+         "FROM " +
+         "languages  JOIN words ON languages.id = words.lan_id " +
+         "JOIN dictionaries ON words.id = dictionaries.values) AS c " +
+         "ON a.m = c.l " +
+         "WHERE key = ? AND lan_first = ? AND lan_second = ? ";
+
+    private static final String READ = "SELECT key, value " +
+            "FROM( " +
+            "SELECT dictionaries.id AS m, words.word AS key, dictionaries.keys, languages.name AS lan_first " +
+            "FROM " +
+            "languages  JOIN words ON languages.id = words.lan_id " +
+            "JOIN dictionaries ON words.id = dictionaries.keys " +
+            ") AS a " +
+            "JOIN (SELECT dictionaries.id AS l, words.word AS value, dictionaries.values, languages.name As lan_second " +
+            "FROM " +
+            "languages  JOIN words ON languages.id = words.lan_id " +
+            "JOIN dictionaries ON words.id = dictionaries.values) AS c " +
+            "ON a.m = c.l " +
+            "WHERE lan_first = ? AND lan_second = ? ";
+
+    private static final String DELETING = "DELETE FROM dictionaries " +
+    "WHERE keys = (SELECT id FROM words WHERE word = ?) or values = (SELECT id FROM words WHERE word = ?); " +
+            "DELETE FROM words WHERE word = ?";
+
     @Override
     public List<DictionaryLine> read(DictionaryType selectedDictionary) {
-        return jdbcTemplate.query("SELECT * FROM dictline", new BeanPropertyRowMapper<>(DictionaryLine.class));
+        return jdbcTemplate.query(READ, new Object[]{selectedDictionary.getTo(), selectedDictionary.getFrom()}, new BeanPropertyRowMapper<>(DictionaryLine.class));
     }
 
     @Override
@@ -29,14 +61,18 @@ public class DictionaryDAO implements DictionaryStorage {
 
     @Override
     public boolean remove(String key, DictionaryType selectedDictionary) {
-        jdbcTemplate.update("DELETE FROM dictline WHERE key = ?", key);
+        jdbcTemplate.update(DELETING, key, key, key);
         return true;
     }
 
     @Override
     public DictionaryLine search(String key, DictionaryType selectedDictionary) {
-
-        return jdbcTemplate.query("SELECT * FROM dictline WHERE key = ?", new Object[]{key}, new BeanPropertyRowMapper<>(DictionaryLine.class))
-                .stream().findAny().orElse(null);
+        List<DictionaryLine> searchLines = jdbcTemplate.query(SEARCH, new Object[]{key, selectedDictionary.getTo(), selectedDictionary.getFrom()}, new BeanPropertyRowMapper<>(DictionaryLine.class));
+        for (DictionaryLine searchLine : searchLines) {
+            if (key.equals(searchLine.getKey())) {
+                return searchLine;
+            }
+        }
+        return null;
     }
 }
