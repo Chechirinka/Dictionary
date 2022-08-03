@@ -17,7 +17,7 @@ public enum DictionaryType {
     private final String patternValue;
     private final String dictionaryPath;
 
-    DictionaryType(Integer number, String patternKey, String patternValue, String dictionaryPath, String to, String from) {
+    DictionaryType(Integer number, String patternKey, String patternValue, String dictionaryPath, String from, String to) {
         this.number = number;
         this.to = to;
         this.from = from;

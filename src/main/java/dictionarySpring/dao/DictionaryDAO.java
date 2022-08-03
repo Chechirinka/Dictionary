@@ -48,6 +48,11 @@ public class DictionaryDAO implements DictionaryStorage {
     "WHERE keys = (SELECT id FROM words WHERE word = ?) or values = (SELECT id FROM words WHERE word = ?); " +
             "DELETE FROM words WHERE word = ?";
 
+    private static final String ADDING = "insert into words(word, lan_id) " +
+            "values (?, (select id FROM languages where name = ?)); " +
+            "insert into words(word, lan_id) " +
+            "values (?, (select id FROM languages where name = ?)); ";
+
     @Override
     public List<DictionaryLine> read(DictionaryType selectedDictionary) {
         return jdbcTemplate.query(READ, new Object[]{selectedDictionary.getTo(), selectedDictionary.getFrom()}, new BeanPropertyRowMapper<>(DictionaryLine.class));
@@ -55,7 +60,7 @@ public class DictionaryDAO implements DictionaryStorage {
 
     @Override
     public boolean addTo(String key, String value, DictionaryType selectedDictionary) {
-        jdbcTemplate.update("INSERT INTO dictline(key, value) VALUES(?, ?)", key, value);
+        jdbcTemplate.update(ADDING, key, selectedDictionary.getFrom(), value, selectedDictionary.getTo());
         return true;
     }
 
@@ -67,7 +72,7 @@ public class DictionaryDAO implements DictionaryStorage {
 
     @Override
     public DictionaryLine search(String key, DictionaryType selectedDictionary) {
-        List<DictionaryLine> searchLines = jdbcTemplate.query(SEARCH, new Object[]{key, selectedDictionary.getTo(), selectedDictionary.getFrom()}, new BeanPropertyRowMapper<>(DictionaryLine.class));
+        List<DictionaryLine> searchLines = jdbcTemplate.query(SEARCH, new Object[]{key, selectedDictionary.getFrom(), selectedDictionary.getTo()}, new BeanPropertyRowMapper<>(DictionaryLine.class));
         for (DictionaryLine searchLine : searchLines) {
             if (key.equals(searchLine.getKey())) {
                 return searchLine;
