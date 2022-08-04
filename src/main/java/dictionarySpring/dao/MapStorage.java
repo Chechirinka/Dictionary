@@ -1,6 +1,7 @@
-package dictionarySpring.storage;
+package dictionarySpring.dao;
 
 import dictionarySpring.configuration.DictionaryType;
+import dictionarySpring.dao.DictionaryStorage;
 import dictionarySpring.model.modelDefault.DictionaryLine;
 
 

@@ -1,8 +1,8 @@
 package dictionarySpring.service;
 
 import dictionarySpring.configuration.DictionaryType;
+import dictionarySpring.dao.DictionaryStorage;
 import dictionarySpring.model.modelDefault.DictionaryLine;
-import dictionarySpring.storage.*;
 import dictionarySpring.validator.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

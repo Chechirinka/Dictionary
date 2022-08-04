@@ -2,7 +2,6 @@ package dictionarySpring.dao;
 
 import dictionarySpring.configuration.DictionaryType;
 import dictionarySpring.model.modelDefault.DictionaryLine;
-import dictionarySpring.storage.DictionaryStorage;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 

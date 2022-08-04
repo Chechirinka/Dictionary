@@ -2,9 +2,9 @@ package dictionarySpring.configuration;
 
 import dictionarySpring.dao.DictionaryDAO;
 import dictionarySpring.dao.DictionaryJpaHql;
-import dictionarySpring.storage.DictionaryStorage;
-import dictionarySpring.storage.FileStorage;
-import dictionarySpring.storage.MapStorage;
+import dictionarySpring.dao.DictionaryStorage;
+import dictionarySpring.dao.FileStorage;
+import dictionarySpring.dao.MapStorage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
