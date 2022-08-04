@@ -1,6 +1,7 @@
 package dictionarySpring.service;
 
-import dictionarySpring.model.Dictionaries;
+
+import dictionarySpring.model.modelDefault.DictionaryLine;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -22,9 +23,9 @@ public class DictionaryLineCodec {
      * @param line полученная строка из FileStorage
      * @return объект DictionaryLine
      */
-    public Dictionaries encode(String line) {
+    public DictionaryLine encode(String line) {
         String[] words = line.split(getSplitChar());
-        return new Dictionaries(words[0], words[1]);
+        return new DictionaryLine(words[0], words[1]);
     }
 
     /**
@@ -32,7 +33,7 @@ public class DictionaryLineCodec {
      * @param dictionaryLine объект строк
      * @return строку
      */
-    public String decode(Dictionaries dictionaryLine) {
+    public String decode(DictionaryLine dictionaryLine) {
         return dictionaryLine.getKey() + splitChar + dictionaryLine.getValue();
     }
 }

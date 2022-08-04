@@ -1,12 +1,13 @@
 package dictionarySpring.storage;
 
 import dictionarySpring.configuration.DictionaryType;
-import dictionarySpring.model.Dictionaries;
+import dictionarySpring.model.modelDefault.DictionaryLine;
 import dictionarySpring.service.DictionaryLineCodec;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -37,9 +38,8 @@ public class FileStorage implements DictionaryStorage {
      */
     private void write(String key, String value, String path, boolean isWrite) throws IOException {
 
-        File file = new File(path);
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, UTF_8, isWrite))) {
-            Dictionaries dictionaryLine = new Dictionaries(key, value);
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(new ClassPathResource(path).getFile(), UTF_8, isWrite))) {
+            DictionaryLine dictionaryLine = new DictionaryLine(key, value);
             if (!path.isEmpty()) {
                 writer.write(dictionaryLineCodec.decode(dictionaryLine) + "\n");
             } else {
@@ -55,11 +55,10 @@ public class FileStorage implements DictionaryStorage {
      * @param path - принимает путь
      * @return - возвращает список <ключ,значение>
      */
-    private List<Dictionaries> operationRead(String path) {
+    private List<DictionaryLine> operationRead(String path) {
 
-        List<Dictionaries> results = new LinkedList<>();
-        File file = new File(path);
-        try (BufferedReader reader = new BufferedReader(new FileReader(file.getAbsolutePath()))) {
+        List<DictionaryLine> results = new LinkedList<>();
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(new ClassPathResource(path).getFile()), StandardCharsets.UTF_8))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 results.add(dictionaryLineCodec.encode(line));
@@ -72,16 +71,18 @@ public class FileStorage implements DictionaryStorage {
 
     /**
      * Метод, который отвечает за чтение данных из файла
+     *
      * @param selectedDictionary - принимает вид языка с которым работает
      * @return mapRead - возвращает список пар <ключ, значение>
      */
     @Override
-    public List<Dictionaries> read(DictionaryType selectedDictionary) {
+    public List<DictionaryLine> read(DictionaryType selectedDictionary) {
         return operationRead(selectedDictionary.getDictionaryPath());
     }
 
     /**
      * Метод, который отвечает за добавление данных в файл
+     *
      * @param key                - ключ
      * @param value              - значение
      * @param selectedDictionary - принимает вид языка с которым работает
@@ -107,8 +108,8 @@ public class FileStorage implements DictionaryStorage {
     @Override
     public boolean remove(String key, DictionaryType selectedDictionary) {
         boolean isRemoved = false;
-        List<Dictionaries> readLines = operationRead(selectedDictionary.getDictionaryPath());
-        for (Dictionaries dictionaryLine : readLines) {
+        List<DictionaryLine> readLines = operationRead(selectedDictionary.getDictionaryPath());
+        for (DictionaryLine dictionaryLine : readLines) {
             if (dictionaryLine.getKey().equals(key)) {
                 isRemoved = readLines.remove(dictionaryLine);
                 break;
@@ -118,7 +119,7 @@ public class FileStorage implements DictionaryStorage {
             return false;
         }
         fileClear(selectedDictionary.getDictionaryPath(), false);
-        for (Dictionaries readLine : readLines) {
+        for (DictionaryLine readLine : readLines) {
             try {
                 write(readLine.getKey(), readLine.getValue(), selectedDictionary.getDictionaryPath(), true);
             } catch (IOException e) {
@@ -138,9 +139,9 @@ public class FileStorage implements DictionaryStorage {
      */
 
     @Override
-    public Dictionaries search(String key, DictionaryType selectedDictionary){
-        List<Dictionaries> searchLines = operationRead(selectedDictionary.getDictionaryPath());
-        for (Dictionaries searchLine : searchLines) {
+    public DictionaryLine search(String key, DictionaryType selectedDictionary){
+        List<DictionaryLine> searchLines = operationRead(selectedDictionary.getDictionaryPath());
+        for (DictionaryLine searchLine : searchLines) {
             if (key.equals(searchLine.getKey())) {
                 return searchLine;
             }
