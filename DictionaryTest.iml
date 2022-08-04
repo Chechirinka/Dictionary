@@ -9,7 +9,6 @@
         <webroots>
           <root url="file://$MODULE_DIR$/src/main/webapp" relative="/" />
         </webroots>
-        <sourceRoots />
       </configuration>
     </facet>
     <facet type="Spring" name="Spring">
@@ -101,6 +100,5 @@
     <orderEntry type="library" name="Maven: org.webjars:webjars-locator-core:0.50" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-core:2.13.1" level="project" />
     <orderEntry type="library" name="Maven: io.github.classgraph:classgraph:4.8.147" level="project" />
-    <orderEntry type="library" name="Maven: org.hibernate:hibernate-core:5.4.28.Final" level="project" />
   </component>
 </module>
