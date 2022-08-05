@@ -1,8 +1,5 @@
 package dictionarySpring.model.database;
 
-import dictionarySpring.model.database.Dictionaries;
-import dictionarySpring.model.database.Language;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -66,4 +63,10 @@ public class Word {
         this.dictionaries = dictionaries;
     }
 
+    public Word(String word) {
+        this.word = word;
+    }
+
+    public Word() {
+    }
 }

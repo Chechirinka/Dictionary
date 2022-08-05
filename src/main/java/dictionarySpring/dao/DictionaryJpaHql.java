@@ -2,7 +2,9 @@ package dictionarySpring.dao;
 
 import dictionarySpring.configuration.DictionaryType;
 import dictionarySpring.model.database.Dictionaries;
+import dictionarySpring.model.database.Word;
 import dictionarySpring.model.modelDefault.DictionaryLine;
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,26 +40,47 @@ public class DictionaryJpaHql implements DictionaryStorage {
         return result;
     }
 
+
     @Override
     @Transactional
     public boolean addTo(String key, String value, DictionaryType selectedDictionary) {
-        return false;
+
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            Word keyWord = new Word(key);
+            Word valueWord = new Word(value);
+            Dictionaries dictionaries = new Dictionaries(keyWord, valueWord);
+
+            System.out.println(dictionaries.toString());
+            session.save(dictionaries);
+            session.getTransaction().commit();
+            return true;
+        } catch (HibernateException hibernateException) {
+            return false;
+        }
     }
 
     @Override
     public boolean remove(String key, DictionaryType selectedDictionary) {
-        Session session = sessionFactory.openSession();
 
-        Dictionaries value = session.createQuery("DELETE FROM Dictionaries WHERE keys.word = :key " +
-                        "AND keys.lan.name =: from " +
-                        "AND values.lan.name =: to", Dictionaries.class)
-                .setParameter("key", key)
-                .setParameter("from", selectedDictionary.getFrom())
-                .setParameter("to", selectedDictionary.getTo())
-                .getSingleResult();
-        System.out.println(value);
-        session.close();
-        return true;
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            String hql = " FROM Dictionaries WHERE keys.word = :key " +
+                    "AND keys.lan.name =: from " +
+                    "AND values.lan.name =: to";
+
+            Dictionaries dictionaries = session.createQuery(hql, Dictionaries.class)
+                    .setParameter("key", key)
+                    .setParameter("from", selectedDictionary.getFrom())
+                    .setParameter("to", selectedDictionary.getTo())
+                    .getSingleResult();
+            System.out.println(dictionaries.toString());
+            session.delete(dictionaries);
+            session.getTransaction().commit();
+            return true;
+        } catch (HibernateException hibernateException) {
+            return false;
+        }
     }
 
     @Override

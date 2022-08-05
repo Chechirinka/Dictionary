@@ -1,5 +1,6 @@
 package dictionarySpring.model.database;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -18,11 +19,11 @@ public class Dictionaries {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false, cascade = CascadeType.ALL)
     @JoinColumn(name = "keys", nullable = false)
     private Word keys;
 
-    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false, cascade = CascadeType.ALL)
     @JoinColumn(name = "\"values\"", nullable = false)
     private Word values;
 
@@ -50,4 +51,11 @@ public class Dictionaries {
         this.values = values;
     }
 
+    public Dictionaries() {
+    }
+
+    public Dictionaries(Word keys, Word values) {
+        this.keys = keys;
+        this.values = values;
+    }
 }
