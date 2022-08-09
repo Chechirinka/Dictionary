@@ -1,7 +1,6 @@
 package dictionarySpring.dao;
 
 import dictionarySpring.configuration.DictionaryType;
-import dictionarySpring.model.database.Dictionaries;
 import dictionarySpring.model.modelDefault.DictionaryLine;
 
 import java.util.List;

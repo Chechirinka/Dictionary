@@ -7,16 +7,18 @@ import dictionarySpring.model.modelDefault.DictionaryLine;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class DictionaryJpaHql implements DictionaryStorage {
+    
+    private SessionFactory sessionFactory;
 
-    private final SessionFactory sessionFactory;
 
-
+        @Autowired
     public DictionaryJpaHql(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
@@ -25,12 +27,9 @@ public class DictionaryJpaHql implements DictionaryStorage {
     @Transactional(readOnly = true)
     public List<DictionaryLine> read(DictionaryType selectedDictionary) {
 
-        Session session = sessionFactory.openSession();
 
-        List<Dictionaries> dictionaryLines = session.createQuery("select d from Dictionaries d", Dictionaries.class)
+        List<Dictionaries> dictionaryLines = sessionFactory.getCurrentSession().createQuery("select d from Dictionaries d", Dictionaries.class)
                 .getResultList();
-
-        session.close();
 
         List<DictionaryLine> result = new ArrayList<>();
 
@@ -45,19 +44,14 @@ public class DictionaryJpaHql implements DictionaryStorage {
     @Transactional
     public boolean addTo(String key, String value, DictionaryType selectedDictionary) {
 
-        try (Session session = sessionFactory.openSession()) {
-            session.beginTransaction();
             Word keyWord = new Word(key);
             Word valueWord = new Word(value);
             Dictionaries dictionaries = new Dictionaries(keyWord, valueWord);
 
-            System.out.println(dictionaries.toString());
-            session.save(dictionaries);
-            session.getTransaction().commit();
+        sessionFactory.getCurrentSession().saveOrUpdate(dictionaries);
+
             return true;
-        } catch (HibernateException hibernateException) {
-            return false;
-        }
+
     }
 
     @Override

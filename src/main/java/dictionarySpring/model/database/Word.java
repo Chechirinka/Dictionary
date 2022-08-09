@@ -1,5 +1,7 @@
 package dictionarySpring.model.database;
 
+import dictionarySpring.configuration.DictionaryType;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -16,6 +18,7 @@ import java.util.Set;
 @Entity
 @Table(name = "words")
 public class Word {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
