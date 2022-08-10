@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DictionaryJpaHql implements DictionaryStorage {
-    
+
     private SessionFactory sessionFactory;
 
 
