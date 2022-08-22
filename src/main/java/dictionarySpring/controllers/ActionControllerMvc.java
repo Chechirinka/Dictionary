@@ -1,10 +1,13 @@
 package dictionarySpring.controllers;
 
 import dictionarySpring.configuration.DictionaryType;
+import dictionarySpring.dao.DictionaryDAO;
 import dictionarySpring.exception.TypeNotFoundException;
+import dictionarySpring.model.DictionaryLine;
 import dictionarySpring.service.DictionaryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,7 +15,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/action")
-
+@Transactional
 public class ActionControllerMvc {
 
     private final static String ERROR_LANGUAGE = "errorResult";

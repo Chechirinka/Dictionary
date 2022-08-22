@@ -2,7 +2,6 @@ package dictionarySpring.model;
 
 public class DictionaryLine {
 
-
     public DictionaryLine() {
     }
 
