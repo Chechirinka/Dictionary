@@ -1,7 +1,6 @@
 package dictionarySpring.dao;
 
 import dictionarySpring.configuration.DictionaryType;
-import dictionarySpring.dao.DictionaryStorage;
 import dictionarySpring.model.modelDefault.DictionaryLine;
 
 
@@ -19,7 +18,6 @@ public class MapStorage implements DictionaryStorage {
 
     /**
      * Метод, который отвечает за чтение данных из мапы
-     *
      * @param selectedDictionary - принимает вид языка с которым работает
      * @return mapRead - возвращает список пар <Ключ, Значение>
      */
@@ -32,7 +30,6 @@ public class MapStorage implements DictionaryStorage {
 
     /**
      * Метод, который отвечает за добавление данных в мапу
-     *
      * @param key                - ключ
      * @param value              - значение
      * @param selectedDictionary - принимает вид языка с которым работает
@@ -46,7 +43,6 @@ public class MapStorage implements DictionaryStorage {
 
     /**
      * Метод, который отвечает за удаление данных из мапы
-     *
      * @param key                - ключ
      * @param selectedDictionary - принимает вид языка с которым работает
      * @return mapRead - возвращает список пар <Ключ, Значение>
@@ -59,7 +55,6 @@ public class MapStorage implements DictionaryStorage {
 
     /**
      * Метод, который отвечает за поиск данных в мапе
-     *
      * @param key                - ключ
      * @param selectedDictionary - принимает вид языка с которым работает
      * @return mapRead - возвращает список пар <Ключ, Значение>

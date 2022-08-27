@@ -5,6 +5,7 @@ import dictionarySpring.model.database.Dictionaries;
 import dictionarySpring.model.database.Languages;
 import dictionarySpring.model.database.Words;
 import dictionarySpring.model.modelDefault.DictionaryLine;
+import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -15,13 +16,13 @@ import javax.persistence.criteria.CriteriaBuilder;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DictionaryJpaHql implements DictionaryStorage {
+public class DictionaryCriteria implements DictionaryStorage{
 
     private SessionFactory sessionFactory;
 
 
-        @Autowired
-    public DictionaryJpaHql(SessionFactory sessionFactory) {
+    @Autowired
+    public DictionaryCriteria(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
 
@@ -37,7 +38,6 @@ public class DictionaryJpaHql implements DictionaryStorage {
 
         criteria.select(dictionaries);
 
-
         List<Dictionaries> dictionaryLines = sessionFactory.getCurrentSession().createQuery(criteria)
                 .getResultList();
 
@@ -50,33 +50,17 @@ public class DictionaryJpaHql implements DictionaryStorage {
         return result;
     }
 
-//    @Override
-//    @Transactional(readOnly = true)
-//    public List<DictionaryLine> read(DictionaryType selectedDictionary) {
-//
-//
-//        List<Dictionaries> dictionaryLines = sessionFactory.getCurrentSession().createQuery("select d from Dictionaries d", Dictionaries.class)
-//                .getResultList();
-//
-//        List<DictionaryLine> result = new ArrayList<>();
-//
-//        dictionaryLines.forEach(x -> {
-//            result.add(new DictionaryLine(x.getKeys().getWord(), x.getValues().getWord()));
-//        });
-//        return result;
-//    }
-
     @Override
     @Transactional
     public boolean addTo(String key, String value, DictionaryType selectedDictionary) {
 
-            Words keyWords = new Words(key, new Languages(selectedDictionary.getFrom(), selectedDictionary.getPatternKey()));
-            Words valueWords = new Words(value, new Languages(selectedDictionary.getTo(), selectedDictionary.getPatternValue()));
-            Dictionaries dictionaries = new Dictionaries(keyWords, valueWords);
+        Words keyWords = new Words(key, new Languages(selectedDictionary.getFrom(), selectedDictionary.getPatternKey()));
+        Words valueWords = new Words(value, new Languages(selectedDictionary.getTo(), selectedDictionary.getPatternValue()));
+        Dictionaries dictionaries = new Dictionaries(keyWords, valueWords);
 
         sessionFactory.getCurrentSession().saveOrUpdate(dictionaries);
 
-            return true;
+        return true;
 
     }
 
@@ -115,6 +99,7 @@ public class DictionaryJpaHql implements DictionaryStorage {
                 .setParameter("from", selectedDictionary.getFrom())
                 .setParameter("to", selectedDictionary.getTo())
                 .getSingleResult();
+
         return new DictionaryLine(value.getKeys().getWord(), value.getValues().getWord());
     }
 }

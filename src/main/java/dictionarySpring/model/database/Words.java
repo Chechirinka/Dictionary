@@ -1,7 +1,5 @@
 package dictionarySpring.model.database;
 
-import dictionarySpring.configuration.DictionaryType;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -17,7 +15,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "words")
-public class Word {
+public class Words {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,7 +27,7 @@ public class Word {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "lan_id", nullable = false)
-    private Language lan;
+    private Languages lan;
 
     @OneToMany(mappedBy = "keys")
     private Set<Dictionaries> dictionaries = new LinkedHashSet<>();
@@ -50,11 +48,11 @@ public class Word {
         this.word = word;
     }
 
-    public Language getLan() {
+    public Languages getLan() {
         return lan;
     }
 
-    public void setLan(Language lan) {
+    public void setLan(Languages lan) {
         this.lan = lan;
     }
 
@@ -66,10 +64,11 @@ public class Word {
         this.dictionaries = dictionaries;
     }
 
-    public Word(String word) {
+    public Words(String word, Languages languages) {
         this.word = word;
+        this.lan = languages;
     }
 
-    public Word() {
+    public Words() {
     }
 }

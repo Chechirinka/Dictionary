@@ -21,11 +21,11 @@ public class Dictionaries {
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false, cascade = CascadeType.ALL)
     @JoinColumn(name = "keys", nullable = false)
-    private Word keys;
+    private Words keys;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false, cascade = CascadeType.ALL)
     @JoinColumn(name = "\"values\"", nullable = false)
-    private Word values;
+    private Words values;
 
     public Long getId() {
         return id;
@@ -35,26 +35,26 @@ public class Dictionaries {
         this.id = id;
     }
 
-    public Word getKeys() {
+    public Words getKeys() {
         return keys;
     }
 
-    public void setKeys(Word keys) {
+    public void setKeys(Words keys) {
         this.keys = keys;
     }
 
-    public Word getValues() {
+    public Words getValues() {
         return values;
     }
 
-    public void setValues(Word values) {
+    public void setValues(Words values) {
         this.values = values;
     }
 
     public Dictionaries() {
     }
 
-    public Dictionaries(Word keys, Word values) {
+    public Dictionaries(Words keys, Words values) {
         this.keys = keys;
         this.values = values;
     }

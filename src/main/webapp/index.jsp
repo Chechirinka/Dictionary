@@ -15,7 +15,7 @@
 
 <body>
 
-<p>Select language:</p>
+<p>Select languages:</p>
 
 <form action="/menu-controller/action-menu" method="get">
 

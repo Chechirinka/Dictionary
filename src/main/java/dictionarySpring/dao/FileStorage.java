@@ -1,7 +1,6 @@
 package dictionarySpring.dao;
 
 import dictionarySpring.configuration.DictionaryType;
-import dictionarySpring.dao.DictionaryStorage;
 import dictionarySpring.model.modelDefault.DictionaryLine;
 import dictionarySpring.service.DictionaryLineCodec;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +31,6 @@ public class FileStorage implements DictionaryStorage {
 
     /**
      * Метод, который отвечает за запись в файл
-     *
      * @param key   - ключ
      * @param value - значение
      * @param path  - принимает путь
@@ -52,7 +50,6 @@ public class FileStorage implements DictionaryStorage {
 
     /**
      * Метод, который отвечает за доступ к чтению из файла
-     *
      * @param path - принимает путь
      * @return - возвращает список <ключ,значение>
      */
@@ -72,7 +69,6 @@ public class FileStorage implements DictionaryStorage {
 
     /**
      * Метод, который отвечает за чтение данных из файла
-     *
      * @param selectedDictionary - принимает вид языка с которым работает
      * @return mapRead - возвращает список пар <ключ, значение>
      */
@@ -83,7 +79,6 @@ public class FileStorage implements DictionaryStorage {
 
     /**
      * Метод, который отвечает за добавление данных в файл
-     *
      * @param key                - ключ
      * @param value              - значение
      * @param selectedDictionary - принимает вид языка с которым работает
@@ -132,7 +127,6 @@ public class FileStorage implements DictionaryStorage {
 
     /**
      * Метод, который отвечает за поиск данных в файле
-     *
      * @param key                - ключ
      * @param selectedDictionary - принимает вид языка с которым работает
      * @return mapRead - возвращает список пар <ключ, значение> и если ключ не найден

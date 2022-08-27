@@ -12,7 +12,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "languages")
-public class Language {
+public class Languages {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -25,7 +25,7 @@ public class Language {
     private String pattern;
 
     @OneToMany(mappedBy = "lan")
-    private Set<Word> words = new LinkedHashSet<>();
+    private Set<Words> words = new LinkedHashSet<>();
 
     public Long getId() {
         return id;
@@ -51,12 +51,20 @@ public class Language {
         this.pattern = pattern;
     }
 
-    public Set<Word> getWords() {
+    public Set<Words> getWords() {
         return words;
     }
 
-    public void setWords(Set<Word> words) {
+    public void setWords(Set<Words> words) {
         this.words = words;
     }
 
+    public Languages() {
+
+    }
+
+    public Languages(String name, String pattern) {
+        this.name = name;
+        this.pattern = pattern;
+    }
 }
