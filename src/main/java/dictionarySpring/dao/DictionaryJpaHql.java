@@ -11,7 +11,6 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,16 +28,14 @@ public class DictionaryJpaHql implements DictionaryStorage {
     @Transactional(readOnly = true)
     public List<DictionaryLine> read(DictionaryType selectedDictionary) {
 
-        CriteriaBuilder criteriaBuilder = sessionFactory.getCriteriaBuilder();
 
-        var criteria = criteriaBuilder.createQuery(Dictionaries.class);
+        String hqls = "select d from Dictionaries d " +
+                "WHERE keys.lan.name =: from " +
+                "AND values.lan.name =: to";
 
-        var dictionaries = criteria.from(Dictionaries.class);
-
-        criteria.select(dictionaries);
-
-
-        List<Dictionaries> dictionaryLines = sessionFactory.getCurrentSession().createQuery(criteria)
+        List<Dictionaries> dictionaryLines = sessionFactory.getCurrentSession().createQuery(hqls, Dictionaries.class)
+                .setParameter("from", selectedDictionary.getFrom())
+                .setParameter("to", selectedDictionary.getTo())
                 .getResultList();
 
         List<DictionaryLine> result = new ArrayList<>();
@@ -46,25 +43,8 @@ public class DictionaryJpaHql implements DictionaryStorage {
         dictionaryLines.forEach(x -> {
             result.add(new DictionaryLine(x.getKeys().getWord(), x.getValues().getWord()));
         });
-
         return result;
     }
-
-//    @Override
-//    @Transactional(readOnly = true)
-//    public List<DictionaryLine> read(DictionaryType selectedDictionary) {
-//
-//
-//        List<Dictionaries> dictionaryLines = sessionFactory.getCurrentSession().createQuery("select d from Dictionaries d", Dictionaries.class)
-//                .getResultList();
-//
-//        List<DictionaryLine> result = new ArrayList<>();
-//
-//        dictionaryLines.forEach(x -> {
-//            result.add(new DictionaryLine(x.getKeys().getWord(), x.getValues().getWord()));
-//        });
-//        return result;
-//    }
 
     @Override
     @Transactional
@@ -85,17 +65,21 @@ public class DictionaryJpaHql implements DictionaryStorage {
 
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
-            String hql = " FROM Dictionaries WHERE keys.word = :key " +
-                    "AND keys.lan.name =: from " +
-                    "AND values.lan.name =: to";
+            var cb = session.getCriteriaBuilder();
 
-            Dictionaries dictionaries = session.createQuery(hql, Dictionaries.class)
-                    .setParameter("key", key)
-                    .setParameter("from", selectedDictionary.getFrom())
-                    .setParameter("to", selectedDictionary.getTo())
+            var criteria = cb.createQuery(Dictionaries.class);
+            var dictionaries = criteria.from(Dictionaries.class);
+
+            criteria.select(dictionaries).where(
+                    cb.equal(dictionaries.get("keys").get("word"), key),
+                    cb.equal(dictionaries.get("keys").get("lan").get("name"), selectedDictionary.getFrom()),
+                    cb.equal(dictionaries.get("values").get("lan").get("name"), selectedDictionary.getTo()));
+
+            Dictionaries value = session.createQuery(criteria)
                     .getSingleResult();
-            System.out.println(dictionaries.toString());
-            session.delete(dictionaries);
+
+            System.out.println(value.toString());
+            session.delete(value);
             session.getTransaction().commit();
             return true;
         } catch (HibernateException hibernateException) {
@@ -117,4 +101,5 @@ public class DictionaryJpaHql implements DictionaryStorage {
                 .getSingleResult();
         return new DictionaryLine(value.getKeys().getWord(), value.getValues().getWord());
     }
+
 }

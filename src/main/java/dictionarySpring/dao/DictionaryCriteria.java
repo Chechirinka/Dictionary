@@ -5,7 +5,6 @@ import dictionarySpring.model.database.Dictionaries;
 import dictionarySpring.model.database.Languages;
 import dictionarySpring.model.database.Words;
 import dictionarySpring.model.modelDefault.DictionaryLine;
-import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -92,12 +91,17 @@ public class DictionaryCriteria implements DictionaryStorage{
     public DictionaryLine search(String key, DictionaryType selectedDictionary) {
         Session session = sessionFactory.openSession();
 
-        Dictionaries value = session.createQuery("FROM Dictionaries WHERE keys.word = :key " +
-                        "AND keys.lan.name =: from " +
-                        "AND values.lan.name =: to", Dictionaries.class)
-                .setParameter("key", key)
-                .setParameter("from", selectedDictionary.getFrom())
-                .setParameter("to", selectedDictionary.getTo())
+        var cb = session.getCriteriaBuilder();
+
+        var criteria = cb.createQuery(Dictionaries.class);
+        var dictionaries = criteria.from(Dictionaries.class);
+
+        criteria.select(dictionaries).where(
+                cb.equal(dictionaries.get("keys").get("word"), key),
+                cb.equal(dictionaries.get("keys").get("lan").get("name"), selectedDictionary.getFrom()),
+                cb.equal(dictionaries.get("values").get("lan").get("name"), selectedDictionary.getTo()));
+
+        Dictionaries value = session.createQuery(criteria)
                 .getSingleResult();
 
         return new DictionaryLine(value.getKeys().getWord(), value.getValues().getWord());
