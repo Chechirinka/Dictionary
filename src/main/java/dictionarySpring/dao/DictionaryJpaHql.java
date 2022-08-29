@@ -16,6 +16,9 @@ import java.util.List;
 
 public class DictionaryJpaHql implements DictionaryStorage {
 
+
+    @Autowired
+    private LanguageDao languageDao;
     private SessionFactory sessionFactory;
 
 
@@ -27,7 +30,6 @@ public class DictionaryJpaHql implements DictionaryStorage {
     @Override
     @Transactional(readOnly = true)
     public List<DictionaryLine> read(DictionaryType selectedDictionary) {
-
 
         String hqls = "select d from Dictionaries d " +
                 "WHERE keys.lan.name =: from " +
@@ -46,19 +48,27 @@ public class DictionaryJpaHql implements DictionaryStorage {
         return result;
     }
 
+
     @Override
     @Transactional
     public boolean addTo(String key, String value, DictionaryType selectedDictionary) {
-
-            Words keyWords = new Words(key, new Languages(selectedDictionary.getFrom(), selectedDictionary.getPatternKey()));
-            Words valueWords = new Words(value, new Languages(selectedDictionary.getTo(), selectedDictionary.getPatternValue()));
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            Words keyWords = new Words(key, languageDao.findLanguages(selectedDictionary.getFrom()));
+            sessionFactory.getCurrentSession().saveOrUpdate(keyWords);
+            Words valueWords = new Words(value, languageDao.findLanguages(selectedDictionary.getTo()));
+            sessionFactory.getCurrentSession().saveOrUpdate(valueWords);
             Dictionaries dictionaries = new Dictionaries(keyWords, valueWords);
 
-        sessionFactory.getCurrentSession().saveOrUpdate(dictionaries);
+            sessionFactory.getCurrentSession().saveOrUpdate(dictionaries);
 
+            session.getTransaction().commit();
             return true;
-
+        } catch (HibernateException hibernateException) {
+            return false;
+        }
     }
+
 
     @Override
     public boolean remove(String key, DictionaryType selectedDictionary) {
@@ -101,5 +111,4 @@ public class DictionaryJpaHql implements DictionaryStorage {
                 .getSingleResult();
         return new DictionaryLine(value.getKeys().getWord(), value.getValues().getWord());
     }
-
 }

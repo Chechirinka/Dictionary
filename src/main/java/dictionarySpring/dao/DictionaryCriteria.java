@@ -2,7 +2,6 @@ package dictionarySpring.dao;
 
 import dictionarySpring.configuration.DictionaryType;
 import dictionarySpring.model.database.Dictionaries;
-import dictionarySpring.model.database.Languages;
 import dictionarySpring.model.database.Words;
 import dictionarySpring.model.modelDefault.DictionaryLine;
 import org.hibernate.HibernateException;
@@ -15,9 +14,11 @@ import javax.persistence.criteria.CriteriaBuilder;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DictionaryCriteria implements DictionaryStorage{
+public class DictionaryCriteria implements DictionaryStorage {
 
     private SessionFactory sessionFactory;
+    @Autowired
+    private LanguageDao languageDao;
 
 
     @Autowired
@@ -52,15 +53,21 @@ public class DictionaryCriteria implements DictionaryStorage{
     @Override
     @Transactional
     public boolean addTo(String key, String value, DictionaryType selectedDictionary) {
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            Words keyWords = new Words(key, languageDao.findLanguages(selectedDictionary.getFrom()));
+            sessionFactory.getCurrentSession().saveOrUpdate(keyWords);
+            Words valueWords = new Words(value, languageDao.findLanguages(selectedDictionary.getTo()));
+            sessionFactory.getCurrentSession().saveOrUpdate(valueWords);
+            Dictionaries dictionaries = new Dictionaries(keyWords, valueWords);
 
-        Words keyWords = new Words(key, new Languages(selectedDictionary.getFrom(), selectedDictionary.getPatternKey()));
-        Words valueWords = new Words(value, new Languages(selectedDictionary.getTo(), selectedDictionary.getPatternValue()));
-        Dictionaries dictionaries = new Dictionaries(keyWords, valueWords);
+            sessionFactory.getCurrentSession().saveOrUpdate(dictionaries);
 
-        sessionFactory.getCurrentSession().saveOrUpdate(dictionaries);
-
-        return true;
-
+            session.getTransaction().commit();
+            return true;
+        } catch (HibernateException hibernateException) {
+            return false;
+        }
     }
 
     @Override
@@ -68,17 +75,21 @@ public class DictionaryCriteria implements DictionaryStorage{
 
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
-            String hql = " FROM Dictionaries WHERE keys.word = :key " +
-                    "AND keys.lan.name =: from " +
-                    "AND values.lan.name =: to";
+            var cb = session.getCriteriaBuilder();
 
-            Dictionaries dictionaries = session.createQuery(hql, Dictionaries.class)
-                    .setParameter("key", key)
-                    .setParameter("from", selectedDictionary.getFrom())
-                    .setParameter("to", selectedDictionary.getTo())
+            var criteria = cb.createQuery(Dictionaries.class);
+            var dictionaries = criteria.from(Dictionaries.class);
+
+            criteria.select(dictionaries).where(
+                    cb.equal(dictionaries.get("keys").get("word"), key),
+                    cb.equal(dictionaries.get("keys").get("lan").get("name"), selectedDictionary.getFrom()),
+                    cb.equal(dictionaries.get("values").get("lan").get("name"), selectedDictionary.getTo()));
+
+            Dictionaries value = session.createQuery(criteria)
                     .getSingleResult();
-            System.out.println(dictionaries.toString());
-            session.delete(dictionaries);
+
+            System.out.println(value.toString());
+            session.delete(value);
             session.getTransaction().commit();
             return true;
         } catch (HibernateException hibernateException) {

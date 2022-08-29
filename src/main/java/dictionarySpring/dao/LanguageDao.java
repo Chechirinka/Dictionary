@@ -3,11 +3,9 @@ package dictionarySpring.dao;
 import dictionarySpring.model.database.Languages;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
-@Transactional
+@Repository
 public class LanguageDao {
 
     private SessionFactory sessionFactory;
@@ -17,7 +15,9 @@ public class LanguageDao {
         this.sessionFactory = sessionFactory;
     }
 
-    public List<Languages> findLanguages() {
-        return sessionFactory.getCurrentSession().createQuery("from Languages", Languages.class).getResultList();
+    public Languages findLanguages(String dictionary) {
+        return sessionFactory.getCurrentSession().createQuery("from Languages WHERE name  =: dictionary  ", Languages.class)
+                .setParameter("dictionary", dictionary)
+        .getSingleResult();
     }
 }
