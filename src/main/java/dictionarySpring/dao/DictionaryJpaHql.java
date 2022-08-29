@@ -2,7 +2,6 @@ package dictionarySpring.dao;
 
 import dictionarySpring.configuration.DictionaryType;
 import dictionarySpring.model.database.Dictionaries;
-import dictionarySpring.model.database.Languages;
 import dictionarySpring.model.database.Words;
 import dictionarySpring.model.modelDefault.DictionaryLine;
 import org.hibernate.HibernateException;
@@ -19,13 +18,8 @@ public class DictionaryJpaHql implements DictionaryStorage {
 
     @Autowired
     private LanguageDao languageDao;
+    @Autowired
     private SessionFactory sessionFactory;
-
-
-        @Autowired
-    public DictionaryJpaHql(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
-    }
 
     @Override
     @Transactional(readOnly = true)

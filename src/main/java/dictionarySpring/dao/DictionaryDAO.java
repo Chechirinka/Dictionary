@@ -2,6 +2,7 @@ package dictionarySpring.dao;
 
 import dictionarySpring.configuration.DictionaryType;
 import dictionarySpring.model.modelDefault.DictionaryLine;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 
@@ -9,11 +10,8 @@ import java.util.List;
 
 public class DictionaryDAO implements DictionaryStorage {
 
+    @Autowired
     private JdbcTemplate jdbcTemplate;
-
-    public DictionaryDAO(JdbcTemplate jdbcTemplate){
-        this.jdbcTemplate = jdbcTemplate;
-    }
 
     private static final String SEARCH = "SELECT key, value " +
             "FROM( " +
@@ -54,7 +52,8 @@ public class DictionaryDAO implements DictionaryStorage {
 
     @Override
     public List<DictionaryLine> read(DictionaryType selectedDictionary) {
-        return jdbcTemplate.query(READ, new Object[]{selectedDictionary.getTo(), selectedDictionary.getFrom()}, new BeanPropertyRowMapper<>(DictionaryLine.class));
+        return jdbcTemplate.query(READ, new Object[]{selectedDictionary.getTo(), selectedDictionary.getFrom()},
+                new BeanPropertyRowMapper<>(DictionaryLine.class));
     }
 
     @Override

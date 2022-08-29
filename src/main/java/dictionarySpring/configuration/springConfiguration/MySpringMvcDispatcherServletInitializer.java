@@ -1,5 +1,6 @@
-package dictionarySpring.configuration;
+package dictionarySpring.configuration.springConfiguration;
 
+import dictionarySpring.configuration.springConfiguration.SpringConfig;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 public class MySpringMvcDispatcherServletInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {

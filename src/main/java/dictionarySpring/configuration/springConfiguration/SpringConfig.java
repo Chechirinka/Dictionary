@@ -1,4 +1,4 @@
-package dictionarySpring.configuration;
+package dictionarySpring.configuration.springConfiguration;
 
 import dictionarySpring.dao.DictionaryCriteria;
 import dictionarySpring.dao.DictionaryDAO;
@@ -46,6 +46,7 @@ import java.util.Properties;
         org.springdoc.webmvc.core.MultipleOpenApiSupportConfiguration.class,
         org.springdoc.core.SpringDocConfiguration.class, org.springdoc.core.SpringDocConfigProperties.class
 })
+
 public class SpringConfig implements WebMvcConfigurer {
 
     private static final String MAP = "map";
@@ -70,9 +71,9 @@ public class SpringConfig implements WebMvcConfigurer {
             case (FILE):
                 return new FileStorage();
             case (DAO):
-                return new DictionaryDAO(jdbcTemplate());
+                return new DictionaryDAO();
             case (JPA):
-                return new DictionaryJpaHql(sessionFactory().getObject());
+                return new DictionaryJpaHql();
             case (CRITERIA):
                 return new DictionaryCriteria();
         }
@@ -117,6 +118,7 @@ public class SpringConfig implements WebMvcConfigurer {
         return dataSource;
     }
 
+    @Bean
     public JdbcTemplate jdbcTemplate() {
         return new JdbcTemplate(dataSource());
     }
@@ -149,7 +151,6 @@ public class SpringConfig implements WebMvcConfigurer {
     public PlatformTransactionManager hibernateTransactionManager() {
         HibernateTransactionManager transactionManager = new HibernateTransactionManager();
         transactionManager.setSessionFactory(sessionFactory().getObject());
-
         return transactionManager;
     }
 }
