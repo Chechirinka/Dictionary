@@ -16,15 +16,10 @@ import java.util.List;
 
 public class DictionaryCriteria implements DictionaryStorage {
 
+    @Autowired
     private SessionFactory sessionFactory;
     @Autowired
     private LanguageDao languageDao;
-
-
-    @Autowired
-    public DictionaryCriteria(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
-    }
 
     @Override
     @Transactional(readOnly = true)

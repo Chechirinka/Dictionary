@@ -1,5 +1,6 @@
 package dictionarySpring.configuration;
 
+import dictionarySpring.dao.DictionaryCriteria;
 import dictionarySpring.dao.DictionaryDAO;
 import dictionarySpring.dao.DictionaryJpaHql;
 import dictionarySpring.dao.DictionaryStorage;
@@ -51,6 +52,7 @@ public class SpringConfig implements WebMvcConfigurer {
     private static final String FILE = "file";
     private static final String DAO = "dao";
     private static final String JPA = "jpa";
+    private static final String CRITERIA = "criteria";
     private final ApplicationContext applicationContext;
     private final Environment env;
 
@@ -71,6 +73,8 @@ public class SpringConfig implements WebMvcConfigurer {
                 return new DictionaryDAO(jdbcTemplate());
             case (JPA):
                 return new DictionaryJpaHql(sessionFactory().getObject());
+            case (CRITERIA):
+                return new DictionaryCriteria();
         }
         return new FileStorage();
     }
