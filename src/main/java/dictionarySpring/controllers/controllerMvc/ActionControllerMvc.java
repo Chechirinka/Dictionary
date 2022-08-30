@@ -1,4 +1,4 @@
-package dictionarySpring.controllers;
+package dictionarySpring.controllers.controllerMvc;
 
 import dictionarySpring.configuration.DictionaryType;
 import dictionarySpring.exception.TypeNotFoundException;
@@ -13,7 +13,6 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/action")
-@Transactional
 public class ActionControllerMvc {
 
     private final static String ERROR_LANGUAGE = "errorResult";

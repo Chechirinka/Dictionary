@@ -2,7 +2,6 @@ package dictionarySpring.dao;
 
 import dictionarySpring.configuration.DictionaryType;
 import dictionarySpring.model.database.Dictionaries;
-import dictionarySpring.model.database.Languages;
 import dictionarySpring.model.database.Words;
 import dictionarySpring.model.modelDefault.DictionaryLine;
 import org.hibernate.HibernateException;
@@ -14,20 +13,17 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DictionaryJpaHql implements DictionaryStorage {
+public class DictionaryHql implements DictionaryAction {
 
+
+    @Autowired
+    private LanguageDao languageDao;
+    @Autowired
     private SessionFactory sessionFactory;
-
-
-        @Autowired
-    public DictionaryJpaHql(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
-    }
 
     @Override
     @Transactional(readOnly = true)
     public List<DictionaryLine> read(DictionaryType selectedDictionary) {
-
 
         String hqls = "select d from Dictionaries d " +
                 "WHERE keys.lan.name =: from " +
@@ -46,19 +42,27 @@ public class DictionaryJpaHql implements DictionaryStorage {
         return result;
     }
 
+
     @Override
     @Transactional
     public boolean addTo(String key, String value, DictionaryType selectedDictionary) {
-
-            Words keyWords = new Words(key, new Languages(selectedDictionary.getFrom(), selectedDictionary.getPatternKey()));
-            Words valueWords = new Words(value, new Languages(selectedDictionary.getTo(), selectedDictionary.getPatternValue()));
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            Words keyWords = new Words(key, languageDao.findLanguages(selectedDictionary.getFrom()));
+            sessionFactory.getCurrentSession().saveOrUpdate(keyWords);
+            Words valueWords = new Words(value, languageDao.findLanguages(selectedDictionary.getTo()));
+            sessionFactory.getCurrentSession().saveOrUpdate(valueWords);
             Dictionaries dictionaries = new Dictionaries(keyWords, valueWords);
 
-        sessionFactory.getCurrentSession().saveOrUpdate(dictionaries);
+            sessionFactory.getCurrentSession().saveOrUpdate(dictionaries);
 
+            session.getTransaction().commit();
             return true;
-
+        } catch (HibernateException hibernateException) {
+            return false;
+        }
     }
+
 
     @Override
     public boolean remove(String key, DictionaryType selectedDictionary) {
@@ -101,5 +105,4 @@ public class DictionaryJpaHql implements DictionaryStorage {
                 .getSingleResult();
         return new DictionaryLine(value.getKeys().getWord(), value.getValues().getWord());
     }
-
 }

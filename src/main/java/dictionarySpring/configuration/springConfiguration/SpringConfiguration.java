@@ -1,10 +1,11 @@
-package dictionarySpring.configuration;
+package dictionarySpring.configuration.springConfiguration;
 
-import dictionarySpring.dao.DictionaryDAO;
-import dictionarySpring.dao.DictionaryJpaHql;
-import dictionarySpring.dao.DictionaryStorage;
-import dictionarySpring.dao.FileStorage;
-import dictionarySpring.dao.MapStorage;
+import dictionarySpring.dao.DictionaryCriteria;
+import dictionarySpring.dao.DictionaryJdbc;
+import dictionarySpring.dao.DictionaryHql;
+import dictionarySpring.dao.DictionaryAction;
+import dictionarySpring.dao.DictionaryFile;
+import dictionarySpring.dao.DictionaryMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
@@ -14,11 +15,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
-import org.springframework.orm.hibernate5.HibernateTransactionManager;
-import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
-import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ViewResolverRegistry;
@@ -28,14 +25,11 @@ import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring5.view.ThymeleafViewResolver;
 
 import javax.sql.DataSource;
-import java.io.IOException;
 import java.util.Objects;
-import java.util.Properties;
 
 @Configuration
 @ComponentScan("dictionarySpring")
 @PropertySource(value = "classpath:properties.yml")
-@PropertySource(value = "classpath:hibernate.properties")
 @EnableTransactionManagement
 @EnableWebMvc
 @Import({
@@ -45,34 +39,50 @@ import java.util.Properties;
         org.springdoc.webmvc.core.MultipleOpenApiSupportConfiguration.class,
         org.springdoc.core.SpringDocConfiguration.class, org.springdoc.core.SpringDocConfigProperties.class
 })
-public class SpringConfig implements WebMvcConfigurer {
+
+public class SpringConfiguration implements WebMvcConfigurer {
 
     private static final String MAP = "map";
     private static final String FILE = "file";
-    private static final String DAO = "dao";
-    private static final String JPA = "jpa";
+    private static final String JDBC = "jdbc";
+    private static final String HQL = "hql";
+    private static final String CRITERIA = "criteria";
     private final ApplicationContext applicationContext;
     private final Environment env;
 
     @Autowired
-    public SpringConfig(ApplicationContext applicationContext, Environment env) {
+    public SpringConfiguration(ApplicationContext applicationContext, Environment env) {
         this.applicationContext = applicationContext;
         this.env = env;
     }
 
     @Bean(name = "dictionaryFactory")
-    public DictionaryStorage getDictionary(@Value("${type}") String args) {
+    public DictionaryAction getDictionary(@Value("${type}") String args) {
         switch (args) {
             case (MAP):
-                return new MapStorage();
+                return new DictionaryMap();
             case (FILE):
-                return new FileStorage();
-            case (DAO):
-                return new DictionaryDAO(jdbcTemplate());
-            case (JPA):
-                return new DictionaryJpaHql(sessionFactory().getObject());
+                return new DictionaryFile();
+            case (JDBC):
+                return new DictionaryJdbc();
+            case (HQL):
+                return new DictionaryHql();
+            case (CRITERIA):
+                return new DictionaryCriteria();
         }
-        return new FileStorage();
+        return new DictionaryFile();
+    }
+
+    @Bean
+    public DataSource dataSource() {
+        DriverManagerDataSource dataSource = new DriverManagerDataSource();
+
+        dataSource.setDriverClassName(Objects.requireNonNull(env.getProperty("driver.class")));
+        dataSource.setUrl(env.getProperty("connection.url"));
+        dataSource.setUsername(env.getProperty("connection.username"));
+        dataSource.setPassword(env.getProperty("connection.password"));
+
+        return dataSource;
     }
 
     @Bean
@@ -99,54 +109,6 @@ public class SpringConfig implements WebMvcConfigurer {
         resolver.setTemplateEngine(templateEngine());
         resolver.setCharacterEncoding("UTF-8");
         registry.viewResolver(resolver);
-    }
-
-
-    public DataSource dataSource() {
-        DriverManagerDataSource dataSource = new DriverManagerDataSource();
-
-        dataSource.setDriverClassName(Objects.requireNonNull(env.getProperty("hibernate.driver.class")));
-        dataSource.setUrl(env.getProperty("hibernate.connection.url"));
-        dataSource.setUsername(env.getProperty("hibernate.connection.username"));
-        dataSource.setPassword(env.getProperty("hibernate.connection.password"));
-
-        return dataSource;
-    }
-
-    public JdbcTemplate jdbcTemplate() {
-        return new JdbcTemplate(dataSource());
-    }
-
-    private Properties hibernateProperties() {
-        Properties properties = new Properties();
-        properties.put("hibernate.dialect", env.getRequiredProperty("hibernate.dialect"));
-        properties.put("hibernate.show_sql", env.getRequiredProperty("hibernate.show_sql"));
-
-        return properties;
-    }
-
-    @Bean
-    public LocalSessionFactoryBean sessionFactory() {
-
-        LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
-
-        sessionFactory.setDataSource(dataSource());
-        sessionFactory.setPackagesToScan("dictionarySpring");
-        sessionFactory.setHibernateProperties(hibernateProperties());
-        try {
-            sessionFactory.afterPropertiesSet();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return sessionFactory;
-    }
-
-    @Bean
-    public PlatformTransactionManager hibernateTransactionManager() {
-        HibernateTransactionManager transactionManager = new HibernateTransactionManager();
-        transactionManager.setSessionFactory(sessionFactory().getObject());
-
-        return transactionManager;
     }
 }
 

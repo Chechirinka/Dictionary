@@ -1,8 +1,9 @@
 package dictionarySpring.service;
 
 import dictionarySpring.configuration.DictionaryType;
-import dictionarySpring.dao.DictionaryStorage;
+import dictionarySpring.dao.DictionaryAction;
 import dictionarySpring.model.modelDefault.DictionaryLine;
+import dictionarySpring.service.formatter.Formation;
 import dictionarySpring.validator.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,7 +20,7 @@ import java.util.Optional;
 public class DictionaryService {
 
     private final Validator validator;
-    private final DictionaryStorage dictionaryStorage;
+    private final DictionaryAction dictionaryAction;
 
     public final static String NO_EXIST_KEY = "Key don't found!";
 
@@ -27,9 +28,9 @@ public class DictionaryService {
     private Formation formation;
 
     @Autowired
-    public DictionaryService(Validator validator, DictionaryStorage dictionaryStorage) {
+    public DictionaryService(Validator validator, DictionaryAction dictionaryAction) {
         this.validator = validator;
-        this.dictionaryStorage = dictionaryStorage;
+        this.dictionaryAction = dictionaryAction;
     }
 
     /**
@@ -44,7 +45,7 @@ public class DictionaryService {
      */
     public boolean addService(String key, String value, DictionaryType selectedDictionary) {
         if (validator.isValidPair(key, value, selectedDictionary)) {
-            return dictionaryStorage.addTo(key, value, selectedDictionary);
+            return dictionaryAction.addTo(key, value, selectedDictionary);
         } else {
             return false;
         }
@@ -57,7 +58,7 @@ public class DictionaryService {
      * @return преобразованные строки из хранилища
      */
     public List<String> readService(DictionaryType selectedDictionary) {
-        return formation.castToString(dictionaryStorage.read(selectedDictionary));
+        return formation.castToString(dictionaryAction.read(selectedDictionary));
     }
 
     /**
@@ -67,7 +68,7 @@ public class DictionaryService {
      * @return строки из хранилища
      */
     public List<DictionaryLine> readServiceRest(DictionaryType selectedDictionary) {
-        return dictionaryStorage.read(selectedDictionary);
+        return dictionaryAction.read(selectedDictionary);
     }
 
     /**
@@ -78,7 +79,7 @@ public class DictionaryService {
      * @return логическое значение
      */
     public boolean removeService(String key, DictionaryType selectedDictionary) {
-        return dictionaryStorage.remove(key, selectedDictionary);
+        return dictionaryAction.remove(key, selectedDictionary);
     }
 
     /**
@@ -90,12 +91,12 @@ public class DictionaryService {
      */
     public String searchService(String key, DictionaryType selectedDictionary)
     {
-        final Optional<DictionaryLine> optionalReturn = Optional.ofNullable(dictionaryStorage.search(key, selectedDictionary));
+        final Optional<DictionaryLine> optionalReturn = Optional.ofNullable(dictionaryAction.search(key, selectedDictionary));
         if (optionalReturn.isEmpty()) {
             return NO_EXIST_KEY;
         }
         else {
-            return formation.castToString(dictionaryStorage.search(key, selectedDictionary));
+            return formation.castToString(dictionaryAction.search(key, selectedDictionary));
         }
     }
 
@@ -108,12 +109,12 @@ public class DictionaryService {
      */
     public ResponseEntity<?> searchServiceRest(String key, DictionaryType selectedDictionary)
     {
-        final Optional<DictionaryLine> optionalReturn = Optional.ofNullable(dictionaryStorage.search(key, selectedDictionary));
+        final Optional<DictionaryLine> optionalReturn = Optional.ofNullable(dictionaryAction.search(key, selectedDictionary));
         if (optionalReturn.isEmpty()) {
             return new ResponseEntity<>(NO_EXIST_KEY, HttpStatus.BAD_REQUEST);
         }
         else {
-            return new ResponseEntity<>(dictionaryStorage.search(key, selectedDictionary), HttpStatus.OK);
+            return new ResponseEntity<>(dictionaryAction.search(key, selectedDictionary), HttpStatus.OK);
         }
     }
 
