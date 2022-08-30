@@ -15,11 +15,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
-import org.springframework.orm.hibernate5.HibernateTransactionManager;
-import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
-import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ViewResolverRegistry;
@@ -27,11 +22,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring5.view.ThymeleafViewResolver;
-
-import javax.sql.DataSource;
-import java.io.IOException;
-import java.util.Objects;
-import java.util.Properties;
 
 @Configuration
 @ComponentScan("dictionarySpring")
@@ -47,20 +37,18 @@ import java.util.Properties;
         org.springdoc.core.SpringDocConfiguration.class, org.springdoc.core.SpringDocConfigProperties.class
 })
 
-public class SpringConfig implements WebMvcConfigurer {
+public class SpringConfiguration implements WebMvcConfigurer {
 
     private static final String MAP = "map";
     private static final String FILE = "file";
-    private static final String DAO = "dao";
-    private static final String JPA = "jpa";
+    private static final String JDBC = "jdbc";
+    private static final String HQL = "hql";
     private static final String CRITERIA = "criteria";
     private final ApplicationContext applicationContext;
-    private final Environment env;
 
     @Autowired
-    public SpringConfig(ApplicationContext applicationContext, Environment env) {
+    public SpringConfiguration(ApplicationContext applicationContext, Environment env) {
         this.applicationContext = applicationContext;
-        this.env = env;
     }
 
     @Bean(name = "dictionaryFactory")
@@ -70,9 +58,9 @@ public class SpringConfig implements WebMvcConfigurer {
                 return new MapStorage();
             case (FILE):
                 return new FileStorage();
-            case (DAO):
+            case (JDBC):
                 return new DictionaryDAO();
-            case (JPA):
+            case (HQL):
                 return new DictionaryJpaHql();
             case (CRITERIA):
                 return new DictionaryCriteria();
@@ -104,54 +92,6 @@ public class SpringConfig implements WebMvcConfigurer {
         resolver.setTemplateEngine(templateEngine());
         resolver.setCharacterEncoding("UTF-8");
         registry.viewResolver(resolver);
-    }
-
-
-    public DataSource dataSource() {
-        DriverManagerDataSource dataSource = new DriverManagerDataSource();
-
-        dataSource.setDriverClassName(Objects.requireNonNull(env.getProperty("hibernate.driver.class")));
-        dataSource.setUrl(env.getProperty("hibernate.connection.url"));
-        dataSource.setUsername(env.getProperty("hibernate.connection.username"));
-        dataSource.setPassword(env.getProperty("hibernate.connection.password"));
-
-        return dataSource;
-    }
-
-    @Bean
-    public JdbcTemplate jdbcTemplate() {
-        return new JdbcTemplate(dataSource());
-    }
-
-    private Properties hibernateProperties() {
-        Properties properties = new Properties();
-        properties.put("hibernate.dialect", env.getRequiredProperty("hibernate.dialect"));
-        properties.put("hibernate.show_sql", env.getRequiredProperty("hibernate.show_sql"));
-
-        return properties;
-    }
-
-    @Bean
-    public LocalSessionFactoryBean sessionFactory() {
-
-        LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
-
-        sessionFactory.setDataSource(dataSource());
-        sessionFactory.setPackagesToScan("dictionarySpring");
-        sessionFactory.setHibernateProperties(hibernateProperties());
-        try {
-            sessionFactory.afterPropertiesSet();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return sessionFactory;
-    }
-
-    @Bean
-    public PlatformTransactionManager hibernateTransactionManager() {
-        HibernateTransactionManager transactionManager = new HibernateTransactionManager();
-        transactionManager.setSessionFactory(sessionFactory().getObject());
-        return transactionManager;
     }
 }
 
