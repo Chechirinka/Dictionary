@@ -8,4 +8,5 @@
 - jdbc(jdbc),
 - hql(hql),
 - criteria(criteria),
+
 необходимо изменить конфигурационный файл: properties.yml
