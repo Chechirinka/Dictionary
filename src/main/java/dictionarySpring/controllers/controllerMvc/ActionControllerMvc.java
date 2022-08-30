@@ -13,7 +13,6 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/action")
-@Transactional
 public class ActionControllerMvc {
 
     private final static String ERROR_LANGUAGE = "errorResult";
