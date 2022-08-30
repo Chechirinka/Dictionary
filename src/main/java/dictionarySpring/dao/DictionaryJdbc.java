@@ -52,7 +52,7 @@ public class DictionaryJdbc implements DictionaryAction {
 
     @Override
     public List<DictionaryLine> read(DictionaryType selectedDictionary) {
-        return jdbcTemplate.query(READ, new Object[]{selectedDictionary.getTo(), selectedDictionary.getFrom()},
+        return jdbcTemplate.query(READ, new Object[]{selectedDictionary.getFrom(), selectedDictionary.getTo()},
                 new BeanPropertyRowMapper<>(DictionaryLine.class));
     }
 
