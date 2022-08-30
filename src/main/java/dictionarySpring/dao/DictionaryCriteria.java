@@ -14,7 +14,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DictionaryCriteria implements DictionaryStorage {
+public class DictionaryCriteria implements DictionaryAction {
 
     @Autowired
     private SessionFactory sessionFactory;

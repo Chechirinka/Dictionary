@@ -2,7 +2,7 @@ package dictionarySpring.dao;
 
 import dictionarySpring.configuration.DictionaryType;
 import dictionarySpring.model.modelDefault.DictionaryLine;
-import dictionarySpring.service.DictionaryLineCodec;
+import dictionarySpring.service.formatter.DictionaryLineCodec;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 
@@ -16,7 +16,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 /**
  * Класс отвечающий за хранение словаря в файловой системе
  */
-public class FileStorage implements DictionaryStorage {
+public class DictionaryFile implements DictionaryAction {
 
     @Autowired
     private DictionaryLineCodec dictionaryLineCodec;

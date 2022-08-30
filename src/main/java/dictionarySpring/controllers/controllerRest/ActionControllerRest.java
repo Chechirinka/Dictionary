@@ -1,4 +1,4 @@
-package dictionarySpring.controllers;
+package dictionarySpring.controllers.controllerRest;
 
 import dictionarySpring.configuration.DictionaryType;
 import dictionarySpring.exception.TypeNotFoundException;

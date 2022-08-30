@@ -8,7 +8,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.util.List;
 
-public class DictionaryDAO implements DictionaryStorage {
+public class DictionaryJdbc implements DictionaryAction {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;

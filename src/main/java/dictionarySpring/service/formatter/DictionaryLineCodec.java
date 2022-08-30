@@ -1,4 +1,4 @@
-package dictionarySpring.service;
+package dictionarySpring.service.formatter;
 
 
 import dictionarySpring.model.modelDefault.DictionaryLine;

@@ -1,11 +1,11 @@
 package dictionarySpring.configuration.springConfiguration;
 
 import dictionarySpring.dao.DictionaryCriteria;
-import dictionarySpring.dao.DictionaryDAO;
-import dictionarySpring.dao.DictionaryJpaHql;
-import dictionarySpring.dao.DictionaryStorage;
-import dictionarySpring.dao.FileStorage;
-import dictionarySpring.dao.MapStorage;
+import dictionarySpring.dao.DictionaryJdbc;
+import dictionarySpring.dao.DictionaryHql;
+import dictionarySpring.dao.DictionaryAction;
+import dictionarySpring.dao.DictionaryFile;
+import dictionarySpring.dao.DictionaryMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
@@ -15,6 +15,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ViewResolverRegistry;
@@ -23,10 +24,12 @@ import org.thymeleaf.spring5.SpringTemplateEngine;
 import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring5.view.ThymeleafViewResolver;
 
+import javax.sql.DataSource;
+import java.util.Objects;
+
 @Configuration
 @ComponentScan("dictionarySpring")
 @PropertySource(value = "classpath:properties.yml")
-@PropertySource(value = "classpath:hibernate.properties")
 @EnableTransactionManagement
 @EnableWebMvc
 @Import({
@@ -45,27 +48,41 @@ public class SpringConfiguration implements WebMvcConfigurer {
     private static final String HQL = "hql";
     private static final String CRITERIA = "criteria";
     private final ApplicationContext applicationContext;
+    private final Environment env;
 
     @Autowired
     public SpringConfiguration(ApplicationContext applicationContext, Environment env) {
         this.applicationContext = applicationContext;
+        this.env = env;
     }
 
     @Bean(name = "dictionaryFactory")
-    public DictionaryStorage getDictionary(@Value("${type}") String args) {
+    public DictionaryAction getDictionary(@Value("${type}") String args) {
         switch (args) {
             case (MAP):
-                return new MapStorage();
+                return new DictionaryMap();
             case (FILE):
-                return new FileStorage();
+                return new DictionaryFile();
             case (JDBC):
-                return new DictionaryDAO();
+                return new DictionaryJdbc();
             case (HQL):
-                return new DictionaryJpaHql();
+                return new DictionaryHql();
             case (CRITERIA):
                 return new DictionaryCriteria();
         }
-        return new FileStorage();
+        return new DictionaryFile();
+    }
+
+    @Bean
+    public DataSource dataSource() {
+        DriverManagerDataSource dataSource = new DriverManagerDataSource();
+
+        dataSource.setDriverClassName(Objects.requireNonNull(env.getProperty("driver.class")));
+        dataSource.setUrl(env.getProperty("connection.url"));
+        dataSource.setUsername(env.getProperty("connection.username"));
+        dataSource.setPassword(env.getProperty("connection.password"));
+
+        return dataSource;
     }
 
     @Bean

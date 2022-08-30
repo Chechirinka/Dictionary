@@ -12,7 +12,7 @@ import java.util.Map;
 /**
  * Класс отвечающий за хранение словаря в оперативной памяти
  */
-public class MapStorage implements DictionaryStorage {
+public class DictionaryMap implements DictionaryAction {
 
     private Map<String, DictionaryLine> map = new HashMap<>();
 
