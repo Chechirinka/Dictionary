@@ -1,5 +1,6 @@
 package dictionarySpring.configuration.hibernateConfiguration;
 
+import liquibase.integration.spring.SpringLiquibase;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -50,6 +51,14 @@ public class HibernateConfiguration {
             e.printStackTrace();
         }
         return sessionFactory;
+    }
+
+    @Bean
+    public SpringLiquibase springLiquibase(DataSource dataSource) {
+        SpringLiquibase springLiquibase = new SpringLiquibase();
+        springLiquibase.setDataSource(dataSource);
+        springLiquibase.setChangeLog("db/changelog/liquibase-changelog.xml");
+        return springLiquibase;
     }
 
     @Bean
