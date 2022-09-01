@@ -61,7 +61,8 @@ public class DictionaryJdbc implements DictionaryAction {
 
     @Override
     public DictionaryLine search(String key, DictionaryType selectedDictionary) {
-        List<DictionaryLine> searchLines = jdbcTemplate.query(SEARCH_PAIR, new Object[]{key, selectedDictionary.getFrom(), selectedDictionary.getTo()}, new BeanPropertyRowMapper<>(DictionaryLine.class));
+        List<DictionaryLine> searchLines = jdbcTemplate.query(SEARCH_PAIR, new Object[]{key, selectedDictionary.getFrom(), selectedDictionary.getTo()},
+                new BeanPropertyRowMapper<>(DictionaryLine.class));
         for (DictionaryLine searchLine : searchLines) {
             if (key.equals(searchLine.getKey())) {
                 return searchLine;

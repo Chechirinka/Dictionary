@@ -48,15 +48,15 @@ public class DictionaryCriteria implements DictionaryAction {
     @Override
     @Transactional
     public boolean addTo(String key, String value, DictionaryType selectedDictionary) {
-        try (Session session = sessionFactory.openSession()) {
+        try (Session session = sessionFactory.getCurrentSession()) {
             session.beginTransaction();
             Words keyWords = new Words(key, languageDao.findLanguages(selectedDictionary.getFrom()));
-            sessionFactory.getCurrentSession().saveOrUpdate(keyWords);
+            session.saveOrUpdate(keyWords);
             Words valueWords = new Words(value, languageDao.findLanguages(selectedDictionary.getTo()));
-            sessionFactory.getCurrentSession().saveOrUpdate(valueWords);
+            session.saveOrUpdate(valueWords);
             Dictionaries dictionaries = new Dictionaries(keyWords, valueWords);
 
-            sessionFactory.getCurrentSession().saveOrUpdate(dictionaries);
+            session.saveOrUpdate(dictionaries);
 
             session.getTransaction().commit();
             return true;
@@ -95,7 +95,7 @@ public class DictionaryCriteria implements DictionaryAction {
     @Override
     @Transactional(readOnly = true)
     public DictionaryLine search(String key, DictionaryType selectedDictionary) {
-        Session session = sessionFactory.openSession();
+        Session session = sessionFactory.getCurrentSession();
 
         var cb = session.getCriteriaBuilder();
 

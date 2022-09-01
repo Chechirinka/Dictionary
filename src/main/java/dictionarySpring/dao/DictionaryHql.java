@@ -25,20 +25,21 @@ public class DictionaryHql implements DictionaryAction {
     @Transactional(readOnly = true)
     public List<DictionaryLine> read(DictionaryType selectedDictionary) {
 
-        String hqls = "select d from Dictionaries d " +
+        String hqlRead = "select d from Dictionaries d " +
                 "WHERE keys.lan.name =: from " +
                 "AND values.lan.name =: to";
 
-        List<Dictionaries> dictionaryLines = sessionFactory.getCurrentSession().createQuery(hqls, Dictionaries.class)
+        List<Dictionaries> dictionaryLines = sessionFactory.getCurrentSession().createQuery(hqlRead, Dictionaries.class)
                 .setParameter("from", selectedDictionary.getFrom())
                 .setParameter("to", selectedDictionary.getTo())
                 .getResultList();
 
         List<DictionaryLine> result = new ArrayList<>();
 
-        dictionaryLines.forEach(x -> {
-            result.add(new DictionaryLine(x.getKeys().getWord(), x.getValues().getWord()));
-        });
+        for(Dictionaries line : dictionaryLines)
+        {
+            result.add(new DictionaryLine(line.getKeys().getWord(), line.getValues().getWord()));
+        }
         return result;
     }
 
@@ -46,12 +47,12 @@ public class DictionaryHql implements DictionaryAction {
     @Override
     @Transactional
     public boolean addTo(String key, String value, DictionaryType selectedDictionary) {
-        try (Session session = sessionFactory.openSession()) {
+        try (Session session = sessionFactory.getCurrentSession()) {
             session.beginTransaction();
             Words keyWords = new Words(key, languageDao.findLanguages(selectedDictionary.getFrom()));
-            sessionFactory.getCurrentSession().saveOrUpdate(keyWords);
+            session.saveOrUpdate(keyWords);
             Words valueWords = new Words(value, languageDao.findLanguages(selectedDictionary.getTo()));
-            sessionFactory.getCurrentSession().saveOrUpdate(valueWords);
+            session.saveOrUpdate(valueWords);
             Dictionaries dictionaries = new Dictionaries(keyWords, valueWords);
 
             sessionFactory.getCurrentSession().saveOrUpdate(dictionaries);
@@ -67,7 +68,7 @@ public class DictionaryHql implements DictionaryAction {
     @Override
     public boolean remove(String key, DictionaryType selectedDictionary) {
 
-        try (Session session = sessionFactory.openSession()) {
+        try (Session session = sessionFactory.getCurrentSession()) {
             session.beginTransaction();
             var cb = session.getCriteriaBuilder();
 
@@ -96,9 +97,11 @@ public class DictionaryHql implements DictionaryAction {
     public DictionaryLine search(String key, DictionaryType selectedDictionary) {
         Session session = sessionFactory.openSession();
 
-        Dictionaries value = session.createQuery("FROM Dictionaries WHERE keys.word = :key " +
-                        "AND keys.lan.name =: from " +
-                        "AND values.lan.name =: to", Dictionaries.class)
+        String hqlSearch = "FROM Dictionaries WHERE keys.word = :key " +
+                "AND keys.lan.name =: from " +
+                "AND values.lan.name =: to";
+
+        Dictionaries value = session.createQuery(hqlSearch, Dictionaries.class)
                 .setParameter("key", key)
                 .setParameter("from", selectedDictionary.getFrom())
                 .setParameter("to", selectedDictionary.getTo())
