@@ -19,6 +19,7 @@ import java.util.Properties;
 @ComponentScan("dictionarySpring")
 @PropertySource(value = "classpath:hibernate.properties")
 @EnableTransactionManagement
+
 public class HibernateConfiguration {
 
     private final Environment env;
@@ -51,14 +52,6 @@ public class HibernateConfiguration {
             e.printStackTrace();
         }
         return sessionFactory;
-    }
-
-    @Bean
-    public SpringLiquibase springLiquibase(DataSource dataSource) {
-        SpringLiquibase springLiquibase = new SpringLiquibase();
-        springLiquibase.setDataSource(dataSource);
-        springLiquibase.setChangeLog("db/changelog/liquibase-changelog.xml");
-        return springLiquibase;
     }
 
     @Bean
