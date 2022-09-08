@@ -1,6 +1,5 @@
 package dictionarySpring.configuration.securityConfiguration;
 
-import dictionarySpring.security.AuthProviderImpl;
 import dictionarySpring.service.PersonDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
