@@ -1,5 +1,5 @@
 package ru.mmtr.storage;
-import ru.mmtr.configuration.DictionaryType;
+import ru.mmtr.configuration.DictionaryName;
 
 import java.util.List;
 
@@ -27,14 +27,14 @@ public class FileStorage implements DictionaryStorage {
 
         List<String> readLines = fileReader.read();
         for (int i = 0; i < readLines.size(); i++) {
-            if (key.equals(readLines.get(i).split(DictionaryType.getSymbol())[0])) {
+            if (key.equals(readLines.get(i).split(DictionaryName.getSymbol())[0])) {
                 readLines.remove(i);
                 break;
             }
         }
         fileReader.fileClear();
         for (String readLine : readLines) {
-            String[] keyAndValue = readLine.split(DictionaryType.getSymbol());
+            String[] keyAndValue = readLine.split(DictionaryName.getSymbol());
             fileReader.write(keyAndValue[0], keyAndValue[1]);
         }
     }
@@ -42,7 +42,7 @@ public class FileStorage implements DictionaryStorage {
     public String search(String key) {
         List<String> searchLines = fileReader.read();
         for (int i = 0; i < searchLines.size(); i++) {
-            if (key.equals(searchLines.get(i).split(DictionaryType.getSymbol())[0])) {
+            if (key.equals(searchLines.get(i).split(DictionaryName.getSymbol())[0])) {
                 return searchLines.get(i);
             }
         }

@@ -1,35 +1,36 @@
 package ru.mmtr.service;
 
-import ru.mmtr.configuration.DictionaryType;
+import ru.mmtr.configuration.DictionaryName;
 import ru.mmtr.storage.*;
 import ru.mmtr.validator.ValidInterface;
 import ru.mmtr.validator.Validation;
 
 import java.util.List;
 
-public class DictionaryService {
+public class DictionaryService implements DictionaryStorage{
 
-    private DictionaryType dictionaryType;
+    private DictionaryName dictionaryName;
     private final ValidInterface validInterface;
     private final DictionaryStorage dictionaryStorage;
 
     public DictionaryService(String type, int dictionary) throws DictionaryException{
-        for (DictionaryType dictionaryType : DictionaryType.values()) {
-            if (dictionaryType.getNumber() == dictionary) {
-                this.dictionaryType = dictionaryType;
+        for (DictionaryName dictionaryName : DictionaryName.values()) {
+            if (dictionaryName.getDictionaryKey() == dictionary) {
+                this.dictionaryName = dictionaryName;
             }
         }
-        if(dictionaryType==null){
+        if(dictionaryName ==null){
             throw new DictionaryException("Словарь не найден");
         }
-        validInterface = new Validation(dictionaryType.getPatternValue(), dictionaryType.getPatternKey());
+        validInterface = new Validation(dictionaryName.getPatternValue(), dictionaryName.getPatternKey());
         if (type.equals("map")) {
             dictionaryStorage = new MapStorage();
         } else {
-            dictionaryStorage = new FileStorage(new FileReader(dictionaryType.getDictionaryPath()));
+            dictionaryStorage = new FileStorage(new FileReader(dictionaryName.getPath()));
         }
     }
-    public String addService(String key, String value) {
+    @Override
+    public String add(String key, String value) {
         if (validInterface.isValidPair(key, value)) {
             return dictionaryStorage.add(key, value);
         } else {
@@ -37,15 +38,18 @@ public class DictionaryService {
         }
     }
 
-    public List<String> readService() {
+    @Override
+    public List<String> read() {
         return dictionaryStorage.read();
     }
 
-    public void removeService(String key) {
+    @Override
+    public void remove(String key) {
         dictionaryStorage.remove(key);
     }
 
-    public String searchService(String key) {
+    @Override
+    public String search(String key) {
         return dictionaryStorage.search(key);
     }
 

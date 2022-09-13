@@ -1,6 +1,6 @@
 package ru.mmtr.storage;
 
-import ru.mmtr.configuration.DictionaryType;
+import ru.mmtr.configuration.DictionaryName;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +35,7 @@ public class FileReader {
             FileWriter fileWriter = new FileWriter(path, UTF_8, true);
             bufferedWriter = new BufferedWriter(fileWriter);
 
-            bufferedWriter.write(key + DictionaryType.getSymbol() + value + "\n");
+            bufferedWriter.write(key + DictionaryName.getSymbol() + value + "\n");
             bufferedWriter.flush();
         } catch (IOException e) {
             e.printStackTrace();

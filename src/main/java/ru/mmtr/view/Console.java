@@ -31,20 +31,20 @@ public class Console {
                     String key = in.next();
                     System.out.println("Enter value");
                     String value = in.next();
-                    System.out.println(dictionaryService.addService(key, value));
+                    System.out.println(dictionaryService.add(key, value));
                     break;
                 case 2:
-                    System.out.println(dictionaryService.readService());
+                    System.out.println(dictionaryService.read());
                     break;
                 case 3:
                     System.out.println("Enter key");
                     key = in.next();
-                    dictionaryService.removeService(key);
+                    dictionaryService.remove(key);
                     break;
                 case 4:
                     System.out.println("Enter key");
                     key = in.next();
-                    System.out.println(dictionaryService.searchService(key));
+                    System.out.println(dictionaryService.search(key));
                     break;
                 case 5:
                     a = false;

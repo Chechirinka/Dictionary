@@ -1,6 +1,6 @@
 package ru.mmtr.storage;
 
-import ru.mmtr.configuration.DictionaryType;
+import ru.mmtr.configuration.DictionaryName;
 
 import ru.mmtr.validator.ValidInterface;
 
@@ -22,7 +22,7 @@ public class MapStorage implements DictionaryStorage {
     public List<String> read() {
         List<String> mapRead = new ArrayList<>();
         for (String mapper : map.keySet()) {
-            mapRead.add(mapper + DictionaryType.getSymbol() + map.get(mapper));
+            mapRead.add(mapper + DictionaryName.getSymbol() + map.get(mapper));
         }
         return mapRead;
     }
@@ -54,7 +54,7 @@ public class MapStorage implements DictionaryStorage {
     public String search(String key) {
         String search = map.get(key);
         if (search != null) {
-            String searchResult = key + DictionaryType.getSymbol() + search;
+            String searchResult = key + DictionaryName.getSymbol() + search;
             return searchResult;
         } else {
             return KEY_DOES_NOT_EXIST;
