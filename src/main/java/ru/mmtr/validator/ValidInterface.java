@@ -1,4 +1,4 @@
-package validator;
+package ru.mmtr.validator;
 
 public interface ValidInterface {
     boolean isValidPair(String key, String value);

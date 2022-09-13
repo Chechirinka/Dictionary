@@ -1,5 +1,5 @@
-package storage;
-import configuration.DictionaryType;
+package ru.mmtr.storage;
+import ru.mmtr.configuration.DictionaryType;
 
 import java.util.List;
 

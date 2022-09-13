@@ -1,4 +1,4 @@
-package validator;
+package ru.mmtr.validator;
 
 import java.util.regex.Pattern;
 

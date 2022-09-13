@@ -1,8 +1,8 @@
-package view;
+package ru.mmtr.view;
 
 import java.util.Scanner;
-import service.DictionaryException;
-import service.DictionaryService;
+import ru.mmtr.service.DictionaryException;
+import ru.mmtr.service.DictionaryService;
 
 public class Console {
 

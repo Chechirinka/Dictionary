@@ -1,9 +1,9 @@
-package service;
+package ru.mmtr.service;
 
-import configuration.DictionaryType;
-import storage.*;
-import validator.ValidInterface;
-import validator.Validation;
+import ru.mmtr.configuration.DictionaryType;
+import ru.mmtr.storage.*;
+import ru.mmtr.validator.ValidInterface;
+import ru.mmtr.validator.Validation;
 
 import java.util.List;
 

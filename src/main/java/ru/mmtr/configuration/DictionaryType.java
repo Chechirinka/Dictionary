@@ -1,4 +1,4 @@
-package configuration;
+package ru.mmtr.configuration;
 
 public enum DictionaryType {
     DICTIONARY_ONE(1, "^[a-zA-Z]{4}$", "[a-zA-Z]+", "src/main/resources/DictionaryE.txt", "English"),

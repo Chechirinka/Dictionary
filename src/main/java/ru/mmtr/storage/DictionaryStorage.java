@@ -1,6 +1,4 @@
-package storage;
-
-import configuration.DictionaryType;
+package ru.mmtr.storage;
 
 import java.util.List;
 

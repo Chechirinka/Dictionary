@@ -1,4 +1,6 @@
-import view.Console;
+package ru.mmtr;
+
+import ru.mmtr.view.Console;
 
 public class Main {
     public static void main(String[] args) {
