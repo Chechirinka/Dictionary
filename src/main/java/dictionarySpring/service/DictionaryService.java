@@ -82,16 +82,8 @@ public class DictionaryService  implements DictionaryStorage{
      * @return объект типа DictionaryLine
      */
     @Override
-    public DictionaryLine search(String key, DictionaryType selectedDictionary)
-    {
-        final Optional<DictionaryLine> optionalReturn = Optional.ofNullable(dictionaryStorage.search(key, selectedDictionary));
-        if (optionalReturn.isEmpty()) {
-            return null;
-        }
-        else {
-            return dictionaryStorage.search(key, selectedDictionary);
-        }
+    public DictionaryLine search(String key, DictionaryType selectedDictionary) {
+        return dictionaryStorage.search(key, selectedDictionary);
     }
-
 }
 

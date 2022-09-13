@@ -70,7 +70,13 @@ public class ActionControllerRest{
         } catch (TypeNotFoundException e) {
             return new ResponseEntity<>(NO_EXIST_LANGUAGE, HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return new ResponseEntity<>(dictionaryService.search(key, selectedDictionary), HttpStatus.OK);
+        DictionaryLine line = dictionaryService.search(key, selectedDictionary);
+        if (line == null)
+        {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(line, HttpStatus.OK);
+        
     }
 
     @PostMapping("remove")
