@@ -1,6 +1,6 @@
 import view.Console;
 
-public class DictionarTest {
+public class Main {
     public static void main(String[] args) {
         Console test = new Console();
         test.choice(args[0]);
