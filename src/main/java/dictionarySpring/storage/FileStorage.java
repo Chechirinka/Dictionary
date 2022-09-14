@@ -104,7 +104,6 @@ public class FileStorage implements DictionaryStorage {
         for (DictionaryLine dictionaryLine : readLines) {
             if (dictionaryLine.getKey().equals(key)) {
                 isRemoved = readLines.remove(dictionaryLine);
-                break;
             }
         }
         if (!isRemoved) {
