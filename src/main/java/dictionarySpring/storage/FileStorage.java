@@ -1,6 +1,6 @@
 package dictionarySpring.storage;
 
-import dictionarySpring.configuration.DictionaryType;
+import dictionarySpring.configuration.DictionaryName;
 import dictionarySpring.model.DictionaryLine;
 import dictionarySpring.service.DictionaryLineCodec;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,8 +68,8 @@ public class FileStorage implements DictionaryStorage {
      * @return mapRead - возвращает список пар <ключ, значение>
      */
     @Override
-    public List<DictionaryLine> read(DictionaryType selectedDictionary) {
-        return operationRead(selectedDictionary.getDictionaryPath());
+    public List<DictionaryLine> read(DictionaryName selectedDictionary) {
+        return operationRead(selectedDictionary.getPath());
     }
 
     /**
@@ -81,9 +81,9 @@ public class FileStorage implements DictionaryStorage {
      * @return логическое значение
      */
     @Override
-    public boolean addTo(String key, String value, DictionaryType selectedDictionary) {
+    public boolean add(String key, String value, DictionaryName selectedDictionary) {
         try {
-            write(key, value, selectedDictionary.getDictionaryPath(), true);
+            write(key, value, selectedDictionary.getPath(), true);
         } catch (IOException e) {
             e.printStackTrace();
             return false;
@@ -98,9 +98,9 @@ public class FileStorage implements DictionaryStorage {
      * @return логическое значение
      */
     @Override
-    public boolean remove(String key, DictionaryType selectedDictionary) {
+    public boolean remove(String key, DictionaryName selectedDictionary) {
         boolean isRemoved = false;
-        List<DictionaryLine> readLines = operationRead(selectedDictionary.getDictionaryPath());
+        List<DictionaryLine> readLines = operationRead(selectedDictionary.getPath());
         for (DictionaryLine dictionaryLine : readLines) {
             if (dictionaryLine.getKey().equals(key)) {
                 isRemoved = readLines.remove(dictionaryLine);
@@ -110,10 +110,10 @@ public class FileStorage implements DictionaryStorage {
         if (!isRemoved) {
             return false;
         }
-        fileClear(selectedDictionary.getDictionaryPath(), false);
+        fileClear(selectedDictionary.getPath(), false);
         for (DictionaryLine readLine : readLines) {
             try {
-                write(readLine.getKey(), readLine.getValue(), selectedDictionary.getDictionaryPath(), true);
+                write(readLine.getKey(), readLine.getValue(), selectedDictionary.getPath(), true);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -131,8 +131,8 @@ public class FileStorage implements DictionaryStorage {
      */
 
     @Override
-    public DictionaryLine search(String key, DictionaryType selectedDictionary){
-        List<DictionaryLine> searchLines = operationRead(selectedDictionary.getDictionaryPath());
+    public DictionaryLine search(String key, DictionaryName selectedDictionary){
+        List<DictionaryLine> searchLines = operationRead(selectedDictionary.getPath());
         for (DictionaryLine searchLine : searchLines) {
             if (key.equals(searchLine.getKey())) {
                 return searchLine;

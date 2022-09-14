@@ -1,6 +1,6 @@
 package dictionarySpring.validator;
 
-import dictionarySpring.configuration.DictionaryType;
+import dictionarySpring.configuration.DictionaryName;
 import org.springframework.stereotype.Component;
 
 import java.util.regex.Pattern;
@@ -25,11 +25,11 @@ public class RegularExpressionValidator implements Validator {
      *
      * @param key
      * @param value
-     * @param dictionaryType
+     * @param dictionaryName
      * @return boolean соответствует ли введенная пара <ключ,значение> выбранному языку
      */
     @Override
-    public boolean isValidPair(String key, String value, DictionaryType dictionaryType) {
-        return isValidKey(key, dictionaryType.getPatternKey()) && isValidValue(value, dictionaryType.getPatternValue());
+    public boolean isValidPair(String key, String value, DictionaryName dictionaryName) {
+        return isValidKey(key, dictionaryName.getPatternKey()) && isValidValue(value, dictionaryName.getPatternValue());
     }
 }

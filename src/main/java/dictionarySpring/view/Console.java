@@ -1,16 +1,18 @@
 package dictionarySpring.view;
 
-import dictionarySpring.configuration.DictionaryType;
+import dictionarySpring.configuration.DictionaryName;
 import dictionarySpring.exception.TypeNotFoundException;
 import dictionarySpring.service.DictionaryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
-    @Component
+@Component
 public class Console {
+    public final static String NO_EXIST_KEY = "Ключ не найден";
     private final static String SELECT_LANGUAGE = "Select lang: 1 - English; 2 - Digital;";
     private final static String SELECT_ACTIONS = "Enter action: 1-add; 2 - read; 3 - remove; 4 - search; 5-exit";
     private final static String ENTER_KEY = "Enter key";
@@ -18,7 +20,6 @@ public class Console {
     private final static String NO_EXIST_LANGUAGE = "Ошибка, такого языка не существует, повторите ввод!";
     private final static String SUCCESS = "Success";
     private final static String ERROR = "Error";
-    public final static String NO_EXIST_KEY = "Ключ не найден";
     private final static String DELETE = "Удалено";
     private final static String NO_DELETE = "Не удалено";
     private final static int ACTION_ADD = 1;
@@ -28,8 +29,12 @@ public class Console {
     private final static int EXIT = 5;
 
     Scanner in = new Scanner(System.in);
+
     private DictionaryService dictionaryService;
-    private DictionaryType selectedDictionary;
+    private DictionaryName selectedDictionary;
+    @Autowired
+    private Formation formation;
+
 
     @Autowired
     public Console(DictionaryService dictionaryService) {
@@ -38,10 +43,23 @@ public class Console {
     }
 
     public void choice() {
-        System.out.println(SELECT_LANGUAGE);
 
+        boolean validEntry = false;
+        int scan = 0;
+
+
+        while(!validEntry) {
+            System.out.println(SELECT_LANGUAGE);
+            try {
+                scan = in.nextInt();
+                validEntry = true;
+            } catch (InputMismatchException e) {
+                System.out.println("Entered value is not an integer!");
+                in.nextLine();
+            }
+        }
         try {
-            selectedDictionary = DictionaryType.getDictionaryTypeByNumber(in.nextInt());
+            selectedDictionary = DictionaryName.getDictionaryTypeByNumber(scan);
         } catch (TypeNotFoundException e) {
             System.out.println(NO_EXIST_LANGUAGE);
             in.nextInt();
@@ -80,23 +98,23 @@ public class Console {
         }
     }
 
-    private String addPair(String key, String value, DictionaryType selectedDictionary) {
-        if (dictionaryService.addService(key, value, selectedDictionary)) {
+    private String addPair(String key, String value, DictionaryName selectedDictionary) {
+        if (dictionaryService.add(key, value, selectedDictionary)) {
             return SUCCESS;
         }
         return ERROR;
     }
 
-    private List<String> readPair(DictionaryType selectedDictionary) {
-        return dictionaryService.readService(selectedDictionary);
+    private List<String> readPair(DictionaryName selectedDictionary) {
+        return formation.castToString(dictionaryService.read(selectedDictionary));
     }
 
-    private String searchPair(String key, DictionaryType selectedDictionary){
-        return dictionaryService.searchService(key, selectedDictionary);
+    private String searchPair(String key, DictionaryName selectedDictionary) {
+        return formation.castToString(dictionaryService.search(key, selectedDictionary));
     }
 
-    private String removePair(String key, DictionaryType selectedDictionary) {
-        if (dictionaryService.removeService(key, selectedDictionary)) {
+    private String removePair(String key, DictionaryName selectedDictionary) {
+        if (dictionaryService.remove(key, selectedDictionary)) {
             return DELETE;
         }
         return NO_DELETE;
