@@ -1,5 +1,6 @@
 package ru.mmtr.dictionarySpring.controllers;
 
+import org.springframework.web.servlet.ModelAndView;
 import ru.mmtr.dictionarySpring.configuration.DictionaryType;
 import ru.mmtr.dictionarySpring.exception.TypeNotFoundException;
 import ru.mmtr.dictionarySpring.model.DictionaryLine;
@@ -20,13 +21,16 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/action-rest")
 @Tag(name = "Action", description = "REST controller for action")
 public class ActionControllerRest{
+
     private final static String NO_EXIST_LANGUAGE = "Error, this language does not exist!";
     private final static String SUCCESS = "Success";
     public final static String ERROR = "Error";
     private final static String DELETE = "Delete";
     private final static String NO_DELETE = "No delete";
+
     private final DictionaryService dictionaryService;
     private DictionaryType selectedDictionary;
+    private ModelAndView modelAndView;
 
     @Autowired
     public ActionControllerRest(DictionaryService dictionaryService) {
@@ -59,11 +63,10 @@ public class ActionControllerRest{
         return new ResponseEntity<>(dictionaryService.read(selectedDictionary), HttpStatus.OK);
     }
 
-
     @GetMapping("search")
     @Operation(summary = "Search", description = "Search something", tags = {"Search"})
     public ResponseEntity<?> search(@RequestParam(value = "dictionaryId") int dictionaryId,
-                                 @RequestParam(value = "key") String key) {
+                                    @RequestParam(value = "key") String key) {
         try {
             selectedDictionary = DictionaryType.getDictionaryTypeByNumber(dictionaryId);
         } catch (TypeNotFoundException e) {

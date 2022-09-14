@@ -1,7 +1,9 @@
 package ru.mmtr.dictionarySpring.controllers;
 
+import org.springframework.web.servlet.ModelAndView;
 import ru.mmtr.dictionarySpring.configuration.DictionaryType;
 import ru.mmtr.dictionarySpring.exception.TypeNotFoundException;
+import ru.mmtr.dictionarySpring.model.DictionaryLine;
 import ru.mmtr.dictionarySpring.service.DictionaryService;
 import ru.mmtr.dictionarySpring.service.Formation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +33,8 @@ public class ActionControllerMvc {
 
     private Formation formation;
 
+    private ModelAndView modelAndView;
+
     @Autowired
     public ActionControllerMvc(DictionaryService dictionaryService, Formation formation) {
         this.dictionaryService = dictionaryService;
@@ -39,8 +43,8 @@ public class ActionControllerMvc {
 
     @PostMapping("/add")
     public String add(@RequestParam(value = "key") String key,
-                        @RequestParam(value = "value") String value,
-                        @RequestParam(value = "dictionaryId") int dictionaryId, Model model) {
+                      @RequestParam(value = "value") String value,
+                      @RequestParam(value = "dictionaryId") int dictionaryId, Model model) {
         model.addAttribute(ID, dictionaryId);
         try {
             selectedDictionary = DictionaryType.getDictionaryTypeByNumber(dictionaryId);
@@ -55,19 +59,35 @@ public class ActionControllerMvc {
         return "action_results/add_result";
     }
 
+//    @GetMapping("/read")
+//    public String read(@RequestParam(value = "dictionaryId") int dictionaryId,
+//                       Model model) {
+//        try {
+//            selectedDictionary = DictionaryType.getDictionaryTypeByNumber(dictionaryId);
+//        } catch (TypeNotFoundException e) {
+//            model.addAttribute(ERROR_LANGUAGE, NO_EXIST_LANGUAGE);
+//        }
+//        List<String> readResult = formation.castToString(dictionaryService.read(selectedDictionary));
+//
+//        model.addAttribute(ID, dictionaryId);
+//        model.addAttribute(RESULT, readResult);
+//        return "action_results/read_result";
+//    }
+
     @GetMapping("/read")
-    public String read(@RequestParam(value = "dictionaryId") int dictionaryId,
-                       Model model) {
+    public ModelAndView read(@RequestParam(value = "dictionaryId") int dictionaryId, Model model, ModelAndView modelAndView) {
+
         try {
             selectedDictionary = DictionaryType.getDictionaryTypeByNumber(dictionaryId);
         } catch (TypeNotFoundException e) {
             model.addAttribute(ERROR_LANGUAGE, NO_EXIST_LANGUAGE);
         }
-        List<String> readResult = formation.castToString(dictionaryService.read(selectedDictionary));
 
+        List<DictionaryLine> readResult = dictionaryService.read(selectedDictionary);
+        modelAndView.setViewName("action_results/read_result");
         model.addAttribute(ID, dictionaryId);
-        model.addAttribute(RESULT, readResult);
-        return "action_results/read_result";
+        modelAndView.addObject(RESULT, readResult);
+        return modelAndView;
     }
 
     @GetMapping("/search")
@@ -110,5 +130,4 @@ public class ActionControllerMvc {
     public String startLib(){
         return "/menu-controller/action-menu/?dictionaryId=";
     }
-
 }
