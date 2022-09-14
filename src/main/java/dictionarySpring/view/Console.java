@@ -2,6 +2,7 @@ package dictionarySpring.view;
 
 import dictionarySpring.configuration.DictionaryName;
 import dictionarySpring.exception.TypeNotFoundException;
+import dictionarySpring.model.DictionaryLine;
 import dictionarySpring.service.DictionaryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -48,7 +49,7 @@ public class Console {
         boolean validEntry = false;
         int scan = 0;
 
-        while(!validEntry) {
+        while (!validEntry) {
             System.out.println(SELECT_LANGUAGE);
             try {
                 scan = in.nextInt();
@@ -110,7 +111,12 @@ public class Console {
     }
 
     private String searchPair(String key, DictionaryName selectedDictionary) {
-        return formation.castToString(dictionaryService.search(key, selectedDictionary));
+        
+        DictionaryLine line = dictionaryService.search(key, selectedDictionary);
+        if (line == null) {
+            return formation.castToString(dictionaryService.search(key, selectedDictionary));
+        }
+        return NO_EXIST_KEY;
     }
 
     private String removePair(String key, DictionaryName selectedDictionary) {

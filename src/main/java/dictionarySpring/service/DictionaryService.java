@@ -19,8 +19,6 @@ public class DictionaryService implements DictionaryStorage{
     private final Validator validator;
     private final DictionaryStorage dictionaryStorage;
 
-    @Autowired
-    private Formation formation;
 
     @Autowired
     public DictionaryService(Validator validator, DictionaryStorage dictionaryStorage) {
