@@ -32,6 +32,7 @@ public class Console {
 
     private DictionaryService dictionaryService;
     private DictionaryName selectedDictionary;
+
     @Autowired
     private Formation formation;
 
@@ -42,11 +43,10 @@ public class Console {
         this.dictionaryService = dictionaryService;
     }
 
-    public void choice() {
+    public void menuSelectDictionary() {
 
         boolean validEntry = false;
         int scan = 0;
-
 
         while(!validEntry) {
             System.out.println(SELECT_LANGUAGE);
@@ -66,7 +66,7 @@ public class Console {
         }
     }
 
-    public void actions() {
+    public void menuSelectActions() {
         boolean isMenuActive = true;
         while (isMenuActive) {
             System.out.println(SELECT_ACTIONS);
