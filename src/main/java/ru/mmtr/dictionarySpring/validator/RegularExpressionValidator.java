@@ -1,6 +1,6 @@
-package dictionarySpring.validator;
+package ru.mmtr.dictionarySpring.validator;
 
-import dictionarySpring.configuration.DictionaryType;
+import ru.mmtr.dictionarySpring.configuration.DictionaryType;
 import org.springframework.stereotype.Component;
 
 import java.util.regex.Pattern;

@@ -1,4 +1,4 @@
-package dictionarySpring.model;
+package ru.mmtr.dictionarySpring.model;
 
 public class DictionaryLine {
 

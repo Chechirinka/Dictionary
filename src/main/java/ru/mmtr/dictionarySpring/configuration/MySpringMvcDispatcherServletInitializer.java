@@ -1,4 +1,4 @@
-package dictionarySpring.configuration;
+package ru.mmtr.dictionarySpring.configuration;
 
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 

@@ -1,9 +1,9 @@
-package dictionarySpring.controllers;
+package ru.mmtr.dictionarySpring.controllers;
 
-import dictionarySpring.configuration.DictionaryType;
-import dictionarySpring.exception.TypeNotFoundException;
-import dictionarySpring.service.DictionaryService;
-import dictionarySpring.service.Formation;
+import ru.mmtr.dictionarySpring.configuration.DictionaryType;
+import ru.mmtr.dictionarySpring.exception.TypeNotFoundException;
+import ru.mmtr.dictionarySpring.service.DictionaryService;
+import ru.mmtr.dictionarySpring.service.Formation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

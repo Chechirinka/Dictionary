@@ -1,16 +1,13 @@
-package dictionarySpring.service;
+package ru.mmtr.dictionarySpring.service;
 
-import dictionarySpring.configuration.DictionaryType;
-import dictionarySpring.model.DictionaryLine;
-import dictionarySpring.storage.*;
-import dictionarySpring.validator.Validator;
+import ru.mmtr.dictionarySpring.configuration.DictionaryType;
+import ru.mmtr.dictionarySpring.model.DictionaryLine;
+import ru.mmtr.dictionarySpring.storage.*;
+import ru.mmtr.dictionarySpring.validator.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Класс отвечает за разделение слоя хранения и слоя представления

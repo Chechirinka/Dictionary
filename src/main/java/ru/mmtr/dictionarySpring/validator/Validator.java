@@ -1,6 +1,6 @@
-package dictionarySpring.validator;
+package ru.mmtr.dictionarySpring.validator;
 
-import dictionarySpring.configuration.DictionaryType;
+import ru.mmtr.dictionarySpring.configuration.DictionaryType;
 
 /**
  * Класс ответственен за проверку вводимых данных пользователем

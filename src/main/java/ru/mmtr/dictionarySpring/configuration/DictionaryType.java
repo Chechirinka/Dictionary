@@ -1,6 +1,6 @@
-package dictionarySpring.configuration;
+package ru.mmtr.dictionarySpring.configuration;
 
-import dictionarySpring.exception.TypeNotFoundException;
+import ru.mmtr.dictionarySpring.exception.TypeNotFoundException;
 
 /**
  * Перечисление, которое отвечает за хранение типов словарей

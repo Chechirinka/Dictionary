@@ -1,7 +1,7 @@
-package dictionarySpring.storage;
+package ru.mmtr.dictionarySpring.storage;
 
-import dictionarySpring.configuration.DictionaryType;
-import dictionarySpring.model.DictionaryLine;
+import ru.mmtr.dictionarySpring.configuration.DictionaryType;
+import ru.mmtr.dictionarySpring.model.DictionaryLine;
 
 import java.util.ArrayList;
 import java.util.HashMap;

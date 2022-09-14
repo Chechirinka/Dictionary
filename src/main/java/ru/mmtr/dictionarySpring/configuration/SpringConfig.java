@@ -1,8 +1,8 @@
-package dictionarySpring.configuration;
+package ru.mmtr.dictionarySpring.configuration;
 
-import dictionarySpring.storage.DictionaryStorage;
-import dictionarySpring.storage.FileStorage;
-import dictionarySpring.storage.MapStorage;
+import ru.mmtr.dictionarySpring.storage.DictionaryStorage;
+import ru.mmtr.dictionarySpring.storage.FileStorage;
+import ru.mmtr.dictionarySpring.storage.MapStorage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
@@ -16,7 +16,7 @@ import org.thymeleaf.spring5.view.ThymeleafViewResolver;
 
 
 @Configuration
-@ComponentScan("dictionarySpring")
+@ComponentScan("ru.mmtr.dictionarySpring")
 @PropertySource(value = "classpath:properties.yml")
 @EnableWebMvc
 @Import({

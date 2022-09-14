@@ -1,13 +1,12 @@
-package dictionarySpring.storage;
+package ru.mmtr.dictionarySpring.storage;
 
-import dictionarySpring.configuration.DictionaryType;
-import dictionarySpring.model.DictionaryLine;
-import dictionarySpring.service.DictionaryLineCodec;
+import ru.mmtr.dictionarySpring.configuration.DictionaryType;
+import ru.mmtr.dictionarySpring.model.DictionaryLine;
+import ru.mmtr.dictionarySpring.service.DictionaryLineCodec;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 
 import java.io.*;
-import java.nio.charset.StandardCharsets;
 import java.util.LinkedList;
 import java.util.List;
 

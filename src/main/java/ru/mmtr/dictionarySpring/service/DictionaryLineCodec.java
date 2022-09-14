@@ -1,6 +1,6 @@
-package dictionarySpring.service;
+package ru.mmtr.dictionarySpring.service;
 
-import dictionarySpring.model.DictionaryLine;
+import ru.mmtr.dictionarySpring.model.DictionaryLine;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 

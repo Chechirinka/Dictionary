@@ -1,9 +1,9 @@
-package dictionarySpring.controllers;
+package ru.mmtr.dictionarySpring.controllers;
 
-import dictionarySpring.configuration.DictionaryType;
-import dictionarySpring.exception.TypeNotFoundException;
-import dictionarySpring.model.DictionaryLine;
-import dictionarySpring.service.DictionaryService;
+import ru.mmtr.dictionarySpring.configuration.DictionaryType;
+import ru.mmtr.dictionarySpring.exception.TypeNotFoundException;
+import ru.mmtr.dictionarySpring.model.DictionaryLine;
+import ru.mmtr.dictionarySpring.service.DictionaryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
