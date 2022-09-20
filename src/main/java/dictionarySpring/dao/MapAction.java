@@ -23,7 +23,7 @@ public class MapAction implements DictionaryAction {
      */
 
     @Override
-    public List<DictionaryLine> read(DictionaryType selectedDictionary) {
+    public List<DictionaryLine> read(DictionaryType selectedDictionaryFrom, DictionaryType selectedDictionaryTo) {
 
         return new ArrayList<>(map.values());
     }
@@ -32,11 +32,10 @@ public class MapAction implements DictionaryAction {
      * Метод, который отвечает за добавление данных в мапу
      * @param key                - ключ
      * @param value              - значение
-     * @param selectedDictionary - принимает вид языка с которым работает
      * @return mapRead - возвращает список пар <Ключ, Значение>
      */
     @Override
-    public boolean add(String key, String value, DictionaryType selectedDictionary) {
+    public boolean add(String key, String value, DictionaryType selectedDictionaryFrom, DictionaryType selectedDictionaryTo) {
         map.put(key, new DictionaryLine(key, value));
         return true;
     }
@@ -44,11 +43,10 @@ public class MapAction implements DictionaryAction {
     /**
      * Метод, который отвечает за удаление данных из мапы
      * @param key                - ключ
-     * @param selectedDictionary - принимает вид языка с которым работает
      * @return mapRead - возвращает список пар <Ключ, Значение>
      */
     @Override
-    public boolean remove(String key, DictionaryType selectedDictionary) {
+    public boolean remove(String key, DictionaryType selectedDictionaryFrom, DictionaryType selectedDictionaryTo) {
 
         return map.remove(key) != null;
     }
@@ -56,11 +54,10 @@ public class MapAction implements DictionaryAction {
     /**
      * Метод, который отвечает за поиск данных в мапе
      * @param key                - ключ
-     * @param selectedDictionary - принимает вид языка с которым работает
      * @return mapRead - возвращает список пар <Ключ, Значение>
      */
     @Override
-    public DictionaryLine search(String key, DictionaryType selectedDictionary) {
+    public DictionaryLine search(String key, DictionaryType selectedDictionaryFrom, DictionaryType selectedDictionaryTo) {
         return map.get(key);
     }
 }

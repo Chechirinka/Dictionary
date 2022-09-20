@@ -18,6 +18,12 @@ public class LanguageDao {
     }
 
     public List<Languages> findLanguages() {
-        return sessionFactory.getCurrentSession().createQuery("from Languages", Languages.class).getResultList();
+        return sessionFactory.getCurrentSession().createQuery("select l from Languages l", Languages.class).getResultList();
+    }
+
+    public Languages findRegular(String dictionaryRegular) {
+        return sessionFactory.getCurrentSession().createQuery("SELECT pattern from Languages where name =: dictionaryRegular", Languages.class)
+                .setParameter("dictionaryRegular", dictionaryRegular)
+                .getSingleResult();
     }
 }

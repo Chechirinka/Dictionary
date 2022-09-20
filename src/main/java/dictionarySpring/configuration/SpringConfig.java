@@ -72,7 +72,7 @@ public class SpringConfig implements WebMvcConfigurer {
             case (JPA):
                 return new DictionaryJpaHql(sessionFactory().getObject());
         }
-        return new FileAction();
+         throw new RuntimeException("В настройках не выбран словарь!");
     }
 
     @Bean

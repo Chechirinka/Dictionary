@@ -1,6 +1,6 @@
 package dictionarySpring.dao;
 
-import dictionarySpring.configuration.DictionaryType;
+import dictionarySpring.model.dictionaryType.DictionaryType;
 import dictionarySpring.model.modelDefault.DictionaryLine;
 import dictionarySpring.service.DictionaryLineCodec;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,7 +73,7 @@ public class FileAction implements DictionaryAction {
      * @return mapRead - возвращает список пар <ключ, значение>
      */
     @Override
-    public List<DictionaryLine> read(DictionaryType selectedDictionary) {
+    public List<DictionaryLine> read(DictionaryType selectedDictionary, DictionaryType selectedDictionaryTo) {
         return operationRead(selectedDictionary.getDictionaryPath());
     }
 
@@ -81,13 +81,12 @@ public class FileAction implements DictionaryAction {
      * Метод, который отвечает за добавление данных в файл
      * @param key                - ключ
      * @param value              - значение
-     * @param selectedDictionary - принимает вид языка с которым работает
      * @return логическое значение
      */
     @Override
-    public boolean add(String key, String value, DictionaryType selectedDictionary) {
+    public boolean add(String key, String value, DictionaryType selectedDictionaryFrom, DictionaryType selectedDictionaryTo) {
         try {
-            write(key, value, selectedDictionary.getDictionaryPath(), true);
+            write(key, value, selectedDictionaryFrom.getDictionaryPath(), true);
         } catch (IOException e) {
             e.printStackTrace();
             return false;
@@ -98,13 +97,12 @@ public class FileAction implements DictionaryAction {
     /***
      * Метод, который отвечает за удаление данных из файла
      * @param key - ключ
-     * @param selectedDictionary - принимает вид языка с которым работает
      * @return логическое значение
      */
     @Override
-    public boolean remove(String key, DictionaryType selectedDictionary) {
+    public boolean remove(String key, DictionaryType selectedDictionaryFrom, DictionaryType selectedDictionaryTo) {
         boolean isRemoved = false;
-        List<DictionaryLine> readLines = operationRead(selectedDictionary.getDictionaryPath());
+        List<DictionaryLine> readLines = operationRead(selectedDictionaryFrom.getDictionaryPath());
         for (DictionaryLine dictionaryLine : readLines) {
             if (dictionaryLine.getKey().equals(key)) {
                 isRemoved = readLines.remove(dictionaryLine);
@@ -114,10 +112,10 @@ public class FileAction implements DictionaryAction {
         if (!isRemoved) {
             return false;
         }
-        fileClear(selectedDictionary.getDictionaryPath(), false);
+        fileClear(selectedDictionaryFrom.getDictionaryPath(), false);
         for (DictionaryLine readLine : readLines) {
             try {
-                write(readLine.getKey(), readLine.getValue(), selectedDictionary.getDictionaryPath(), true);
+                write(readLine.getKey(), readLine.getValue(), selectedDictionaryFrom.getDictionaryPath(), true);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -128,14 +126,13 @@ public class FileAction implements DictionaryAction {
     /**
      * Метод, который отвечает за поиск данных в файле
      * @param key                - ключ
-     * @param selectedDictionary - принимает вид языка с которым работает
      * @return mapRead - возвращает список пар <ключ, значение> и если ключ не найден
      * возвращается null
      */
-
+String path;
     @Override
-    public DictionaryLine search(String key, DictionaryType selectedDictionary){
-        List<DictionaryLine> searchLines = operationRead(selectedDictionary.getDictionaryPath());
+    public DictionaryLine search(String key, DictionaryType selectedDictionaryFrom, DictionaryType selectedDictionaryTo){
+        List<DictionaryLine> searchLines = operationRead(selectedDictionaryFrom.getDictionaryPath());
         for (DictionaryLine searchLine : searchLines) {
             if (key.equals(searchLine.getKey())) {
                 return searchLine;

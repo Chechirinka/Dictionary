@@ -1,7 +1,7 @@
 package dictionarySpring.controllers;
 
-import dictionarySpring.configuration.DictionaryType;
 import dictionarySpring.exception.TypeNotFoundException;
+import dictionarySpring.model.dictionaryType.DictionaryType;
 import dictionarySpring.model.modelDefault.DictionaryLine;
 import dictionarySpring.service.DictionaryService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -39,14 +39,11 @@ public class ActionControllerRest{
 
     @PostMapping("add")
     @Operation(summary = "Add", description = "Add something", tags = {"Add"})
-    public ResponseEntity<?> add(@RequestParam(value = "dictionaryId") int dictionaryId,
+    public ResponseEntity<?> add(@RequestParam(value = "from") String selectedDictionaryFrom,
+                                 @RequestParam(value = "to") String selectedDictionaryTo,
                                  @RequestBody DictionaryLine dictionaryLine) {
-        try {
-            selectedDictionary = DictionaryType.getDictionaryTypeByNumber(dictionaryId);
-        } catch (TypeNotFoundException e) {
-            return new ResponseEntity<>(NO_EXIST_LANGUAGE, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-        if (dictionaryService.add(dictionaryLine.getKey(), dictionaryLine.getValue(), selectedDictionary)) {
+
+        if (dictionaryService.add(dictionaryLine.getKey(), dictionaryLine.getValue(), , selectedDictionaryTo)) {
             return new ResponseEntity<>(SUCCESS, HttpStatus.OK);
         }
         return new ResponseEntity<>(ERROR, HttpStatus.BAD_REQUEST);

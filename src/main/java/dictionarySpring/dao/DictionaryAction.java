@@ -1,6 +1,7 @@
 package dictionarySpring.dao;
 
-import dictionarySpring.configuration.DictionaryType;
+
+import dictionarySpring.model.dictionaryType.DictionaryType;
 import dictionarySpring.model.modelDefault.DictionaryLine;
 
 import java.util.List;
@@ -10,12 +11,12 @@ import java.util.List;
  */
 public interface DictionaryAction {
 
-    List<DictionaryLine> read(DictionaryType selectedDictionary);
+    List<DictionaryLine> read(DictionaryType selectedDictionaryFrom, DictionaryType selectedDictionaryTo);
 
-    boolean add(String key, String value, DictionaryType selectedDictionary);
+    boolean add(String key, String value, DictionaryType selectedDictionaryFrom, DictionaryType selectedDictionaryTo);
 
-    boolean remove(String key, DictionaryType selectedDictionary);
+    boolean remove(String key, DictionaryType selectedDictionaryFrom, DictionaryType selectedDictionaryTo);
 
-    DictionaryLine search(String key, DictionaryType selectedDictionary);
+    DictionaryLine search(String key, DictionaryType selectedDictionaryFrom, DictionaryType selectedDictionaryTo);
 
 }

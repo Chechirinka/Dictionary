@@ -1,10 +1,11 @@
 package dictionarySpring.validator;
 
-import dictionarySpring.configuration.DictionaryType;
+
+import dictionarySpring.model.dictionaryType.DictionaryType;
 
 /**
  * Класс ответственен за проверку вводимых данных пользователем
  */
 public interface Validator {
-    boolean isValidPair(String key, String value, DictionaryType dictionaryType);
+    boolean isValidPair(String key, String value, DictionaryType selectedDictionaryFrom, DictionaryType selectedDictionaryTo);
 }
