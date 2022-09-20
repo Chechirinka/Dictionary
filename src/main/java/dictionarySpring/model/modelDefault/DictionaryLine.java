@@ -1,11 +1,7 @@
 package dictionarySpring.model.modelDefault;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 
 public class DictionaryLine {
-
 
     public DictionaryLine() {
     }

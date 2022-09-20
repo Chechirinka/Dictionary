@@ -21,14 +21,13 @@ public class RegularExpressionValidatorBD implements Validator{
 
     /**
      * Метод проверяет совпадени пары <ключ, значение> выбранному языку
-     *
      * @param key
      * @param value
      * @return boolean соответствует ли введенная пара <ключ,значение> выбранному языку
      */
     @Override
     public boolean isValidPair(String key, String value, DictionaryType selectedDictionaryFrom, DictionaryType selectedDictionaryTo) {
-        return isValidKey(key, selectedDictionaryFrom.getPatternKey()) && isValidValue(value, selectedDictionaryTo.getPatternValue());
+        return isValidKey(key, selectedDictionaryFrom.getFrom()) && isValidValue(value, selectedDictionaryTo.getTo());
     }
 
 }
