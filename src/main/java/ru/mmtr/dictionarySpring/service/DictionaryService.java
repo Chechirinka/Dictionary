@@ -21,9 +21,6 @@ public class DictionaryService  implements DictionaryStorage{
     public final static String NO_EXIST_KEY = "Key don't found!";
 
     @Autowired
-    private Formation formation;
-
-    @Autowired
     public DictionaryService(Validator validator, DictionaryStorage dictionaryStorage) {
         this.validator = validator;
         this.dictionaryStorage = dictionaryStorage;
