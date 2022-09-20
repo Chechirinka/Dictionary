@@ -59,7 +59,7 @@ public class DictionaryDAO implements DictionaryStorage {
     }
 
     @Override
-    public boolean addTo(String key, String value, DictionaryType selectedDictionary) {
+    public boolean add(String key, String value, DictionaryType selectedDictionary) {
         jdbcTemplate.update(ADDING, key, selectedDictionary.getFrom(), value, selectedDictionary.getTo());
         return true;
     }
