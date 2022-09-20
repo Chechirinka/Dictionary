@@ -8,11 +8,11 @@ import java.util.List;
 /**
  * Интерфейс предоставляющий метододы для работы с данными словаря
  */
-public interface DictionaryStorage {
+public interface DictionaryAction {
 
     List<DictionaryLine> read(DictionaryType selectedDictionary);
 
-    boolean addTo(String key, String value, DictionaryType selectedDictionary);
+    boolean add(String key, String value, DictionaryType selectedDictionary);
 
     boolean remove(String key, DictionaryType selectedDictionary);
 

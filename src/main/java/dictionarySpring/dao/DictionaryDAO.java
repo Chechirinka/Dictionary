@@ -7,7 +7,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.util.List;
 
-public class DictionaryDAO implements DictionaryStorage {
+public class DictionaryDAO implements DictionaryAction {
 
     private JdbcTemplate jdbcTemplate;
 
@@ -58,7 +58,7 @@ public class DictionaryDAO implements DictionaryStorage {
     }
 
     @Override
-    public boolean addTo(String key, String value, DictionaryType selectedDictionary) {
+    public boolean add(String key, String value, DictionaryType selectedDictionary) {
         jdbcTemplate.update(ADDING, key, selectedDictionary.getFrom(), value, selectedDictionary.getTo());
         return true;
     }

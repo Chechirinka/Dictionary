@@ -2,9 +2,9 @@ package dictionarySpring.configuration;
 
 import dictionarySpring.dao.DictionaryDAO;
 import dictionarySpring.dao.DictionaryJpaHql;
-import dictionarySpring.dao.DictionaryStorage;
-import dictionarySpring.dao.FileStorage;
-import dictionarySpring.dao.MapStorage;
+import dictionarySpring.dao.DictionaryAction;
+import dictionarySpring.dao.FileAction;
+import dictionarySpring.dao.MapAction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
@@ -61,18 +61,18 @@ public class SpringConfig implements WebMvcConfigurer {
     }
 
     @Bean(name = "dictionaryFactory")
-    public DictionaryStorage getDictionary(@Value("${type}") String args) {
+    public DictionaryAction getDictionary(@Value("${type}") String args) {
         switch (args) {
             case (MAP):
-                return new MapStorage();
+                return new MapAction();
             case (FILE):
-                return new FileStorage();
+                return new FileAction();
             case (DAO):
                 return new DictionaryDAO(jdbcTemplate());
             case (JPA):
                 return new DictionaryJpaHql(sessionFactory().getObject());
         }
-        return new FileStorage();
+        return new FileAction();
     }
 
     @Bean

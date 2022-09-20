@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DictionaryJpaHql implements DictionaryStorage {
+public class DictionaryJpaHql implements DictionaryAction {
 
     private SessionFactory sessionFactory;
 
@@ -48,7 +48,7 @@ public class DictionaryJpaHql implements DictionaryStorage {
 
     @Override
     @Transactional
-    public boolean addTo(String key, String value, DictionaryType selectedDictionary) {
+    public boolean add(String key, String value, DictionaryType selectedDictionary) {
 
             Words keyWords = new Words(key, new Languages(selectedDictionary.getFrom(), selectedDictionary.getPatternKey()));
             Words valueWords = new Words(value, new Languages(selectedDictionary.getTo(), selectedDictionary.getPatternValue()));

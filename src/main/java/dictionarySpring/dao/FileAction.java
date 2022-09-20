@@ -16,7 +16,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 /**
  * Класс отвечающий за хранение словаря в файловой системе
  */
-public class FileStorage implements DictionaryStorage {
+public class FileAction implements DictionaryAction {
 
     @Autowired
     private DictionaryLineCodec dictionaryLineCodec;
@@ -85,7 +85,7 @@ public class FileStorage implements DictionaryStorage {
      * @return логическое значение
      */
     @Override
-    public boolean addTo(String key, String value, DictionaryType selectedDictionary) {
+    public boolean add(String key, String value, DictionaryType selectedDictionary) {
         try {
             write(key, value, selectedDictionary.getDictionaryPath(), true);
         } catch (IOException e) {
