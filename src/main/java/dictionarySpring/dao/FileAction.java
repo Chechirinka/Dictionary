@@ -69,12 +69,11 @@ public class FileAction implements DictionaryAction {
 
     /**
      * Метод, который отвечает за чтение данных из файла
-     * @param selectedDictionary - принимает вид языка с которым работает
      * @return mapRead - возвращает список пар <ключ, значение>
      */
     @Override
-    public List<DictionaryLine> read(DictionaryType selectedDictionary, DictionaryType selectedDictionaryTo) {
-        return operationRead(selectedDictionary.getDictionaryPath());
+    public List<DictionaryLine> read(String selectedDictionaryFrom, String selectedDictionaryTo) {
+        return operationRead(selectedDictionaryFrom);
     }
 
     /**
@@ -84,9 +83,9 @@ public class FileAction implements DictionaryAction {
      * @return логическое значение
      */
     @Override
-    public boolean add(String key, String value, DictionaryType selectedDictionaryFrom, DictionaryType selectedDictionaryTo) {
+    public boolean add(String key, String value, String selectedDictionaryFrom, String selectedDictionaryTo) {
         try {
-            write(key, value, selectedDictionaryFrom.getDictionaryPath(), true);
+            write(key, value, selectedDictionaryFrom, true);
         } catch (IOException e) {
             e.printStackTrace();
             return false;
@@ -100,9 +99,9 @@ public class FileAction implements DictionaryAction {
      * @return логическое значение
      */
     @Override
-    public boolean remove(String key, DictionaryType selectedDictionaryFrom, DictionaryType selectedDictionaryTo) {
+    public boolean remove(String key, String selectedDictionaryFrom, String selectedDictionaryTo) {
         boolean isRemoved = false;
-        List<DictionaryLine> readLines = operationRead(selectedDictionaryFrom.getDictionaryPath());
+        List<DictionaryLine> readLines = operationRead(selectedDictionaryFrom);
         for (DictionaryLine dictionaryLine : readLines) {
             if (dictionaryLine.getKey().equals(key)) {
                 isRemoved = readLines.remove(dictionaryLine);
@@ -112,10 +111,10 @@ public class FileAction implements DictionaryAction {
         if (!isRemoved) {
             return false;
         }
-        fileClear(selectedDictionaryFrom.getDictionaryPath(), false);
+        fileClear(selectedDictionaryFrom, false);
         for (DictionaryLine readLine : readLines) {
             try {
-                write(readLine.getKey(), readLine.getValue(), selectedDictionaryFrom.getDictionaryPath(), true);
+                write(readLine.getKey(), readLine.getValue(), selectedDictionaryFrom, true);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -131,8 +130,8 @@ public class FileAction implements DictionaryAction {
      */
 String path;
     @Override
-    public DictionaryLine search(String key, DictionaryType selectedDictionaryFrom, DictionaryType selectedDictionaryTo){
-        List<DictionaryLine> searchLines = operationRead(selectedDictionaryFrom.getDictionaryPath());
+    public DictionaryLine search(String key, String selectedDictionaryFrom, String selectedDictionaryTo){
+        List<DictionaryLine> searchLines = operationRead(selectedDictionaryFrom);
         for (DictionaryLine searchLine : searchLines) {
             if (key.equals(searchLine.getKey())) {
                 return searchLine;

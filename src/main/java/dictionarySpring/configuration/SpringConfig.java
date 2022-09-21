@@ -5,6 +5,10 @@ import dictionarySpring.dao.DictionaryJpaHql;
 import dictionarySpring.dao.DictionaryAction;
 import dictionarySpring.dao.FileAction;
 import dictionarySpring.dao.MapAction;
+import dictionarySpring.model.dictionaryType.DictionaryType;
+import dictionarySpring.validator.RegularExpressionValidatorBd;
+import dictionarySpring.validator.RegularExpressionValidatorMapAndFile;
+import dictionarySpring.validator.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
@@ -29,6 +33,8 @@ import org.thymeleaf.spring5.view.ThymeleafViewResolver;
 
 import javax.sql.DataSource;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Properties;
 
@@ -73,6 +79,19 @@ public class SpringConfig implements WebMvcConfigurer {
                 return new DictionaryJpaHql(sessionFactory().getObject());
         }
          throw new RuntimeException("В настройках не выбран словарь!");
+    }
+
+    @Bean(name = "dictionaryFactory")
+    public Validator getDictionaryValidation(@Value("${type}") String args) {
+        switch (args) {
+            case (MAP):
+            case (FILE):
+                return new RegularExpressionValidatorMapAndFile();
+            case (DAO):
+            case (JPA):
+                return new RegularExpressionValidatorBd();
+        }
+        throw new RuntimeException("В настройках не выбран словарь!");
     }
 
     @Bean

@@ -19,8 +19,6 @@ import java.util.List;
 @Transactional
 public class ActionControllerMvc {
 
-    private final static String ERROR_LANGUAGE = "errorResult";
-    private final static String NO_EXIST_LANGUAGE = "Ошибка, такого языка не существует, повторите ввод!";
     private final static String SUCCESS = "Success";
     private final static String ERROR = "Error";
     private final static String DELETE = "Удалено";
@@ -30,7 +28,6 @@ public class ActionControllerMvc {
 
     private final DictionaryService dictionaryService;
 
-    private DictionaryType selectedDictionary;
 
     private Formation formation;
 
@@ -45,14 +42,11 @@ public class ActionControllerMvc {
     @PostMapping("/add")
     public String add(@RequestParam(value = "key") String key,
                       @RequestParam(value = "value") String value,
-                      @RequestParam(value = "dictionaryId") int dictionaryId, Model model) {
-        model.addAttribute(ID, dictionaryId);
-        try {
-            selectedDictionary = DictionaryType.getDictionaryTypeByNumber(dictionaryId);
-        } catch (TypeNotFoundException e) {
-            model.addAttribute(ERROR_LANGUAGE, NO_EXIST_LANGUAGE);
-        }
-        if (dictionaryService.add(key, value, selectedDictionary)) {
+                      @RequestParam(value = "selectedDictionaryFrom") String selectedDictionaryFrom,
+                      @RequestParam(value = "selectedDictionaryTo") String selectedDictionaryTo,
+                      Model model) {
+
+        if (dictionaryService.add(key, value, selectedDictionaryFrom, selectedDictionaryTo)) {
             model.addAttribute(RESULT, SUCCESS);
         } else {
             model.addAttribute(RESULT, ERROR);
@@ -61,60 +55,32 @@ public class ActionControllerMvc {
     }
 
     @GetMapping("/read")
-    public String read(@RequestParam(value = "dictionaryId") int dictionaryId,
+    public String read(@RequestParam(value = "selectedDictionaryFrom") String selectedDictionaryFrom,
+                       @RequestParam(value = "selectedDictionaryTo") String selectedDictionaryTo,
                        Model model) {
-        try {
-            selectedDictionary = DictionaryType.getDictionaryTypeByNumber(dictionaryId);
-        } catch (TypeNotFoundException e) {
-            model.addAttribute(ERROR_LANGUAGE, NO_EXIST_LANGUAGE);
-        }
-        List<String> readResult = formation.castToString(dictionaryService.read(selectedDictionary));
+        List<String> readResult = formation.castToString(dictionaryService.read(selectedDictionaryFrom, selectedDictionaryTo));
 
-        model.addAttribute(ID, dictionaryId);
         model.addAttribute(RESULT, readResult);
         return "action_results/read_result";
     }
 
-//    @GetMapping("/read")
-//    public ModelAndView read(@RequestParam(value = "dictionaryId") int dictionaryId, Model model, ModelAndView modelAndView) {
-//
-//        try {
-//            selectedDictionary = DictionaryType.getDictionaryTypeByNumber(dictionaryId);
-//        } catch (TypeNotFoundException e) {
-//            model.addAttribute(ERROR_LANGUAGE, NO_EXIST_LANGUAGE);
-//        }
-//
-//        List<DictionaryLine> readResult = dictionaryService.read(selectedDictionary);
-//        modelAndView.setViewName("action_results/read_result");
-//        model.addAttribute(ID, dictionaryId);
-//        modelAndView.addObject(RESULT, readResult);
-//        return modelAndView;
-//    }
-
     @GetMapping("/search")
     public String search(@RequestParam String key,
-                         @RequestParam(value = "dictionaryId") int dictionaryId, Model model) {
-        model.addAttribute(ID, dictionaryId);
-        try {
-            selectedDictionary = DictionaryType.getDictionaryTypeByNumber(dictionaryId);
-        } catch (TypeNotFoundException e) {
-            model.addAttribute(ERROR_LANGUAGE, NO_EXIST_LANGUAGE);
-        }
-        String searchResult = formation.castToString(dictionaryService.search(key, selectedDictionary));
+                         @RequestParam(value = "selectedDictionaryFrom") String selectedDictionaryFrom,
+                         @RequestParam(value = "selectedDictionaryTo") String selectedDictionaryTo,
+                         Model model) {
+        String searchResult = formation.castToString(dictionaryService.search(key, selectedDictionaryFrom, selectedDictionaryTo));
         model.addAttribute(RESULT, searchResult);
         return "action_results/search_result";
     }
 
     @PostMapping("/remove")
     public String remove(@RequestParam String key,
-                         @RequestParam(value = "dictionaryId") int dictionaryId, Model model) {
-        model.addAttribute(ID, dictionaryId);
-        try {
-            selectedDictionary = DictionaryType.getDictionaryTypeByNumber(dictionaryId);
-        } catch (TypeNotFoundException e) {
-            model.addAttribute(ERROR_LANGUAGE, NO_EXIST_LANGUAGE);
-        }
-        if (dictionaryService.remove(key, selectedDictionary)) {
+                         @RequestParam(value = "selectedDictionaryFrom") String selectedDictionaryFrom,
+                         @RequestParam(value = "selectedDictionaryTo") String selectedDictionaryTo,
+                         Model model) {
+
+        if (dictionaryService.remove(key, selectedDictionaryFrom, selectedDictionaryTo)) {
             model.addAttribute(RESULT, DELETE);
         } else {
             model.addAttribute(RESULT, NO_DELETE);

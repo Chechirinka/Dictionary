@@ -1,7 +1,6 @@
 package dictionarySpring.service;
 
 import dictionarySpring.dao.DictionaryAction;
-import dictionarySpring.model.dictionaryType.DictionaryType;
 import dictionarySpring.model.modelDefault.DictionaryLine;
 import dictionarySpring.validator.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +32,7 @@ public class DictionaryService implements DictionaryAction{
      * @return логическое значение
      */
     @Override
-    public boolean add(String key, String value, DictionaryType selectedDictionaryFrom, DictionaryType selectedDictionaryTo) {
+    public boolean add(String key, String value, String selectedDictionaryFrom, String selectedDictionaryTo) {
         if (validator.isValidPair(key, value, selectedDictionaryFrom, selectedDictionaryTo)) {
             return dictionaryAction.add(key, value, selectedDictionaryFrom, selectedDictionaryTo);
         } else {
@@ -46,7 +45,7 @@ public class DictionaryService implements DictionaryAction{
      * @return строки из хранилища
      */
     @Override
-    public List<DictionaryLine> read(DictionaryType selectedDictionaryFrom, DictionaryType selectedDictionaryTo) {
+    public List<DictionaryLine> read(String selectedDictionaryFrom, String selectedDictionaryTo) {
         return dictionaryAction.read(selectedDictionaryFrom, selectedDictionaryTo);
     }
 
@@ -56,7 +55,7 @@ public class DictionaryService implements DictionaryAction{
      * @return логическое значение
      */
     @Override
-    public boolean remove(String key, DictionaryType selectedDictionaryFrom, DictionaryType selectedDictionaryTo) {
+    public boolean remove(String key, String selectedDictionaryFrom, String selectedDictionaryTo) {
         return dictionaryAction.remove(key, selectedDictionaryFrom, selectedDictionaryTo);
     }
 
@@ -66,7 +65,7 @@ public class DictionaryService implements DictionaryAction{
      * @return объект типа DictionaryLine
      */
     @Override
-    public DictionaryLine search(String key, DictionaryType selectedDictionaryFrom, DictionaryType selectedDictionaryTo) {
+    public DictionaryLine search(String key, String selectedDictionaryFrom, String selectedDictionaryTo) {
         return dictionaryAction.search(key, selectedDictionaryFrom, selectedDictionaryTo);
     }
 }

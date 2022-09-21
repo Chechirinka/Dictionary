@@ -1,6 +1,5 @@
 package dictionarySpring.dao;
 
-import dictionarySpring.configuration.DictionaryType;
 import dictionarySpring.model.modelDefault.DictionaryLine;
 
 
@@ -18,12 +17,11 @@ public class MapAction implements DictionaryAction {
 
     /**
      * Метод, который отвечает за чтение данных из мапы
-     * @param selectedDictionary - принимает вид языка с которым работает
      * @return mapRead - возвращает список пар <Ключ, Значение>
      */
 
     @Override
-    public List<DictionaryLine> read(DictionaryType selectedDictionaryFrom, DictionaryType selectedDictionaryTo) {
+    public List<DictionaryLine> read(String selectedDictionaryFrom, String selectedDictionaryTo) {
 
         return new ArrayList<>(map.values());
     }
@@ -35,7 +33,7 @@ public class MapAction implements DictionaryAction {
      * @return mapRead - возвращает список пар <Ключ, Значение>
      */
     @Override
-    public boolean add(String key, String value, DictionaryType selectedDictionaryFrom, DictionaryType selectedDictionaryTo) {
+    public boolean add(String key, String value, String selectedDictionaryFrom, String selectedDictionaryTo) {
         map.put(key, new DictionaryLine(key, value));
         return true;
     }
@@ -46,7 +44,7 @@ public class MapAction implements DictionaryAction {
      * @return mapRead - возвращает список пар <Ключ, Значение>
      */
     @Override
-    public boolean remove(String key, DictionaryType selectedDictionaryFrom, DictionaryType selectedDictionaryTo) {
+    public boolean remove(String key, String selectedDictionaryFrom, String selectedDictionaryTo) {
 
         return map.remove(key) != null;
     }
@@ -57,7 +55,7 @@ public class MapAction implements DictionaryAction {
      * @return mapRead - возвращает список пар <Ключ, Значение>
      */
     @Override
-    public DictionaryLine search(String key, DictionaryType selectedDictionaryFrom, DictionaryType selectedDictionaryTo) {
+    public DictionaryLine search(String key, String selectedDictionaryFrom, String selectedDictionaryTo) {
         return map.get(key);
     }
 }

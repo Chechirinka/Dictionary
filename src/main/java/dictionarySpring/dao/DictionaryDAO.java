@@ -53,25 +53,25 @@ public class DictionaryDAO implements DictionaryAction {
             "values (?, (select id FROM languages where name = ?)); ";
 
     @Override
-    public List<DictionaryLine> read(DictionaryType selectedDictionaryFrom, DictionaryType selectedDictionaryTo) {
-        return jdbcTemplate.query(READ, new Object[]{selectedDictionaryFrom.getFrom(), selectedDictionaryTo.getTo(), }, new BeanPropertyRowMapper<>(DictionaryLine.class));
+    public List<DictionaryLine> read(String selectedDictionaryFrom, String selectedDictionaryTo) {
+        return jdbcTemplate.query(READ, new Object[]{selectedDictionaryFrom, selectedDictionaryTo}, new BeanPropertyRowMapper<>(DictionaryLine.class));
     }
 
     @Override
-    public boolean add(String key, String value, DictionaryType selectedDictionaryFrom, DictionaryType selectedDictionaryTo) {
-        jdbcTemplate.update(ADDING, key, selectedDictionaryFrom.getFrom(), value, selectedDictionaryTo.getTo());
+    public boolean add(String key, String value, String selectedDictionaryFrom, String selectedDictionaryTo) {
+        jdbcTemplate.update(ADDING, key, selectedDictionaryFrom, value, selectedDictionaryTo);
         return true;
     }
 
     @Override
-    public boolean remove(String key, DictionaryType selectedDictionaryFrom, DictionaryType selectedDictionaryTo) {
-        jdbcTemplate.update(DELETING, key, key, key);
+    public boolean remove(String key, String selectedDictionaryFrom, String selectedDictionaryTo) {
+        jdbcTemplate.update(DELETING, key, selectedDictionaryFrom, selectedDictionaryTo);
         return true;
     }
 
     @Override
-    public DictionaryLine search(String key, DictionaryType selectedDictionaryFrom, DictionaryType selectedDictionaryTo) {
-        List<DictionaryLine> searchLines = jdbcTemplate.query(SEARCH, new Object[]{key, selectedDictionaryFrom.getFrom(), selectedDictionaryTo.getTo()}, new BeanPropertyRowMapper<>(DictionaryLine.class));
+    public DictionaryLine search(String key, String selectedDictionaryFrom, String selectedDictionaryTo) {
+        List<DictionaryLine> searchLines = jdbcTemplate.query(SEARCH, new Object[]{key, selectedDictionaryFrom, selectedDictionaryTo}, new BeanPropertyRowMapper<>(DictionaryLine.class));
         for (DictionaryLine searchLine : searchLines) {
             if (key.equals(searchLine.getKey())) {
                 return searchLine;

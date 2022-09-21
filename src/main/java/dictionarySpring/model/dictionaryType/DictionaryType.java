@@ -2,35 +2,20 @@ package dictionarySpring.model.dictionaryType;
 
 public class DictionaryType {
 
-    private final String from;
-    private final String to;
-    private final String patternKey;
-    private final String patternValue;
-    private final String dictionaryPath;
+    private final String pattern;
+    private final String path;
 
-    DictionaryType(String from, String to, String patternKey, String patternValue, String dictionaryPath) {
-        this.from = from;
-        this.to = to;
-        this.patternKey = patternKey;
-        this.patternValue = patternValue;
-        this.dictionaryPath = dictionaryPath;
+
+    public DictionaryType(String pattern, String path) {
+        this.pattern = pattern;
+        this.path = path;
     }
 
-    public String getFrom() {
-        return from;
+    public String getPattern() {
+        return pattern;
     }
 
-    public String getTo() {
-        return to;
+    public String getPath() {
+        return path;
     }
-
-    public String getPatternKey() {
-        return patternKey;
-    }
-
-    public String getPatternValue() {
-        return patternValue;
-    }
-
-    public String getDictionaryPath() {return dictionaryPath;}
 }

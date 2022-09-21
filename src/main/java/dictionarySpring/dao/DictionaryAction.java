@@ -11,12 +11,12 @@ import java.util.List;
  */
 public interface DictionaryAction {
 
-    List<DictionaryLine> read(DictionaryType selectedDictionaryFrom, DictionaryType selectedDictionaryTo);
+    List<DictionaryLine> read(String selectedDictionaryFrom, String selectedDictionaryTo);
 
-    boolean add(String key, String value, DictionaryType selectedDictionaryFrom, DictionaryType selectedDictionaryTo);
+    boolean add(String key, String value, String selectedDictionaryFrom, String selectedDictionaryTo);
 
-    boolean remove(String key, DictionaryType selectedDictionaryFrom, DictionaryType selectedDictionaryTo);
+    boolean remove(String key, String selectedDictionaryFrom, String selectedDictionaryTo);
 
-    DictionaryLine search(String key, DictionaryType selectedDictionaryFrom, DictionaryType selectedDictionaryTo);
+    DictionaryLine search(String key, String selectedDictionaryFrom, String selectedDictionaryTo);
 
 }

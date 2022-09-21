@@ -1,22 +1,21 @@
 package dictionarySpring.validator;
 
-import dictionarySpring.model.dictionaryType.DictionaryType;
 import dictionarySpring.dao.LanguageDao;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.regex.Pattern;
 
-public class RegularExpressionValidatorBD implements Validator{
+public class RegularExpressionValidatorBd implements Validator{
 
     @Autowired
     private LanguageDao languageDao;
 
     private boolean isValidKey(String key, String selectedDictionaryFrom) {
-        return Pattern.matches(languageDao.findRegular(selectedDictionaryFrom).getPattern(), key);
+        return Pattern.matches(key, languageDao.getFindRegular(selectedDictionaryFrom).getPattern());
     }
 
     private boolean isValidValue(String value, String selectedDictionaryTo){
-        return Pattern.matches(languageDao.findRegular(selectedDictionaryTo).getPattern(), value);
+        return Pattern.matches(value, languageDao.getFindRegular(selectedDictionaryTo).getPattern());
     }
 
     /**
@@ -26,8 +25,8 @@ public class RegularExpressionValidatorBD implements Validator{
      * @return boolean соответствует ли введенная пара <ключ,значение> выбранному языку
      */
     @Override
-    public boolean isValidPair(String key, String value, DictionaryType selectedDictionaryFrom, DictionaryType selectedDictionaryTo) {
-        return isValidKey(key, selectedDictionaryFrom.getFrom()) && isValidValue(value, selectedDictionaryTo.getTo());
+    public boolean isValidPair(String key, String value, String selectedDictionaryFrom, String selectedDictionaryTo) {
+        return isValidKey(key, selectedDictionaryFrom) && isValidValue(value, selectedDictionaryTo);
     }
 
 }
