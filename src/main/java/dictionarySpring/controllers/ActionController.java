@@ -2,6 +2,7 @@ package dictionarySpring.controllers;
 
 import dictionarySpring.configuration.DictionaryType;
 import dictionarySpring.exception.TypeNotFoundException;
+import dictionarySpring.model.DictionaryLine;
 import dictionarySpring.service.DictionaryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 
@@ -38,67 +40,73 @@ public class ActionController {
     }
 
     @PostMapping("/add")
-    public String add(@RequestParam(value = "key") String key,
-                      @RequestParam(value = "value") String value,
-                      @RequestParam(value = "dictionaryId") int dictionaryId, Model model) {
-        model.addAttribute(ID, dictionaryId);
+    public ModelAndView add(@RequestParam(value = "key") String key,
+                            @RequestParam(value = "value") String value,
+                            @RequestParam(value = "dictionaryId") int dictionaryId, ModelAndView modelAndView) {
+        modelAndView.addObject(ID, dictionaryId);
         try {
             selectedDictionary = DictionaryType.getDictionaryTypeByNumber(dictionaryId);
         } catch (TypeNotFoundException e) {
-            model.addAttribute(ERROR_LANGUAGE, NO_EXIST_LANGUAGE);
+            modelAndView.addObject(ERROR_LANGUAGE, NO_EXIST_LANGUAGE);
         }
-        if (dictionaryService.addService(key, value, selectedDictionary)) {
-            model.addAttribute(RESULT, SUCCESS);
+        modelAndView.setViewName("action_results/add_result");
+        if (dictionaryService.add(key, value, selectedDictionary)) {
+            modelAndView.addObject(RESULT, SUCCESS);
         } else {
-            model.addAttribute(RESULT, ERROR);
+            modelAndView.addObject(RESULT, ERROR);
         }
-        return "action_results/add_result";
+        return modelAndView;
     }
 
     @GetMapping("/read")
-    public String read(@RequestParam(value = "dictionaryId") int dictionaryId,
-                       Model model) {
+    public ModelAndView read(@RequestParam(value = "dictionaryId") int dictionaryId, ModelAndView modelAndView) {
+
         try {
             selectedDictionary = DictionaryType.getDictionaryTypeByNumber(dictionaryId);
         } catch (TypeNotFoundException e) {
-            model.addAttribute(ERROR_LANGUAGE, NO_EXIST_LANGUAGE);
+            modelAndView.addObject(ERROR_LANGUAGE, NO_EXIST_LANGUAGE);
         }
-        List<String> readResult = dictionaryService.readService(selectedDictionary);
 
-        model.addAttribute(ID, dictionaryId);
-        model.addAttribute(RESULT, readResult);
-        return "action_results/read_result";
+        List<DictionaryLine> readResult = dictionaryService.read(selectedDictionary);
+        modelAndView.setViewName("action_results/read_result");
+        modelAndView.addObject(ID, dictionaryId);
+        modelAndView.addObject(RESULT, readResult);
+        return modelAndView;
     }
 
     @GetMapping("/search")
-    public String search(@RequestParam String key,
-                         @RequestParam(value = "dictionaryId") int dictionaryId, Model model) {
-        model.addAttribute(ID, dictionaryId);
+    public ModelAndView search(@RequestParam String key,
+                               @RequestParam(value = "dictionaryId") int dictionaryId, ModelAndView modelAndView) {
         try {
             selectedDictionary = DictionaryType.getDictionaryTypeByNumber(dictionaryId);
         } catch (TypeNotFoundException e) {
-            model.addAttribute(ERROR_LANGUAGE, NO_EXIST_LANGUAGE);
+            modelAndView.addObject(ERROR_LANGUAGE, NO_EXIST_LANGUAGE);
         }
-        String searchResult = dictionaryService.searchService(key, selectedDictionary);
-        model.addAttribute(RESULT, searchResult);
-        return "action_results/search_result";
+
+        DictionaryLine searchResult = dictionaryService.search(key, selectedDictionary);
+        modelAndView.setViewName("action_results/search_result");
+        modelAndView.addObject(ID, dictionaryId);
+        modelAndView.addObject(RESULT, searchResult);
+        return modelAndView;
     }
 
     @PostMapping("/remove")
-    public String remove(@RequestParam String key,
-                         @RequestParam(value = "dictionaryId") int dictionaryId, Model model) {
-        model.addAttribute(ID, dictionaryId);
+    public ModelAndView remove(@RequestParam String key,
+                               @RequestParam(value = "dictionaryId") int dictionaryId, ModelAndView modelAndView) {
+        modelAndView.addObject(ID, dictionaryId);
         try {
             selectedDictionary = DictionaryType.getDictionaryTypeByNumber(dictionaryId);
         } catch (TypeNotFoundException e) {
-            model.addAttribute(ERROR_LANGUAGE, NO_EXIST_LANGUAGE);
+            modelAndView.addObject(ERROR_LANGUAGE, NO_EXIST_LANGUAGE);
         }
-        if (dictionaryService.removeService(key, selectedDictionary)) {
-            model.addAttribute(RESULT, DELETE);
+
+        modelAndView.setViewName("action_results/remove_result");
+        if (dictionaryService.remove(key, selectedDictionary)) {
+            modelAndView.addObject(RESULT, DELETE);
         } else {
-            model.addAttribute(RESULT, NO_DELETE);
+            modelAndView.addObject(RESULT, NO_DELETE);
         }
-        return "action_results/remove_result";
+        return modelAndView;
     }
 
     @ModelAttribute("action")

@@ -4,26 +4,20 @@ import dictionarySpring.configuration.DictionaryType;
 import dictionarySpring.model.DictionaryLine;
 import dictionarySpring.storage.*;
 import dictionarySpring.validator.Validator;
-import dictionarySpring.controllers.Formation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Класс отвечает за разделение слоя хранения и слоя представления
  */
 @Component
-public class DictionaryService {
+public class DictionaryService implements DictionaryStorage{
 
     private final Validator validator;
     private final DictionaryStorage dictionaryStorage;
 
-    public final static String NO_EXIST_KEY = "Key don't found!";
-
-    @Autowired
-    private Formation formation;
 
     @Autowired
     public DictionaryService(Validator validator, DictionaryStorage dictionaryStorage) {
@@ -41,9 +35,9 @@ public class DictionaryService {
      * @param selectedDictionary выбранный язык словаря
      * @return логическое значение
      */
-    public boolean addService(String key, String value, DictionaryType selectedDictionary) {
+    public boolean add(String key, String value, DictionaryType selectedDictionary) {
         if (validator.isValidPair(key, value, selectedDictionary)) {
-            return dictionaryStorage.addTo(key, value, selectedDictionary);
+            return dictionaryStorage.add(key, value, selectedDictionary);
         } else {
             return false;
         }
@@ -55,8 +49,8 @@ public class DictionaryService {
      * @param selectedDictionary выбранный язык словаря
      * @return строки из хранилища
      */
-    public List<String> readService(DictionaryType selectedDictionary) {
-        return formation.castToString(dictionaryStorage.read(selectedDictionary));
+    public List<DictionaryLine> read(DictionaryType selectedDictionary) {
+        return dictionaryStorage.read(selectedDictionary);
     }
 
     /**
@@ -66,7 +60,7 @@ public class DictionaryService {
      * @param selectedDictionary выбранный язык словаря
      * @return логическое значение
      */
-    public boolean removeService(String key, DictionaryType selectedDictionary) {
+    public boolean remove(String key, DictionaryType selectedDictionary) {
         return dictionaryStorage.remove(key, selectedDictionary);
     }
 
@@ -78,15 +72,9 @@ public class DictionaryService {
      * @param selectedDictionary выбранный язык словаря
      * @return объект типа DictionaryLine
      */
-    public String searchService(String key, DictionaryType selectedDictionary)
-    {
-        final Optional<DictionaryLine> optionalReturn = Optional.ofNullable(dictionaryStorage.search(key, selectedDictionary));
-        if (optionalReturn.isEmpty()) {
-            return NO_EXIST_KEY;
-        }
-        else {
-            return formation.castToString(dictionaryStorage.search(key, selectedDictionary));
-        }
+    @Override
+    public DictionaryLine search(String key, DictionaryType selectedDictionary) {
+        return dictionaryStorage.search(key, selectedDictionary);
     }
 }
 

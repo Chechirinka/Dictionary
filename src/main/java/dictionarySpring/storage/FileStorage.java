@@ -89,7 +89,7 @@ public class FileStorage implements DictionaryStorage {
      * @return логическое значение
      */
     @Override
-    public boolean addTo(String key, String value, DictionaryType selectedDictionary) {
+    public boolean add(String key, String value, DictionaryType selectedDictionary) {
         try {
             write(key, value, selectedDictionary.getDictionaryPath(), true);
         } catch (IOException e) {

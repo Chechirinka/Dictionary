@@ -11,7 +11,7 @@ import java.util.Map;
 /**
  * Класс отвечающий за хранение словаря в оперативной памяти
  */
-public class MapStorage implements DictionaryStorage {
+public class MapStorage implements DictionaryStorage{
 
     private Map<String, DictionaryLine> map = new HashMap<>();
 
@@ -37,7 +37,7 @@ public class MapStorage implements DictionaryStorage {
      * @return mapRead - возвращает список пар <Ключ, Значение>
      */
     @Override
-    public boolean addTo(String key, String value, DictionaryType selectedDictionary) {
+    public boolean add(String key, String value, DictionaryType selectedDictionary) {
         map.put(key, new DictionaryLine(key, value));
         return true;
     }
