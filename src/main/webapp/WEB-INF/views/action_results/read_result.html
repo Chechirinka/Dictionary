@@ -12,37 +12,16 @@
 
 <p th:text="${errorResult}"/>
 
-<!--<table>-->
-<!--    <tr>-->
-<!--        <th>Словарь</th>-->
-<!--    </tr>-->
-
-<!--    <tr th:each="lst : ${result}">-->
-<!--        <td th:utext="${lst}">brand</td>-->
-
-<!--    </tr>-->
-
-<!--</table>-->
-
-<h2>Latin Entries</h2>
 <table>
     <tr>
-        <th>id</th>
-        <th>word</th>
-        <th>translation</th>
-        <th>action</th>
+        <th>Словарь</th>
     </tr>
-    <c:forEach var="entry" items="${result}">
-        <tr>
-            <td>${entry.getKey}</td>
-            <td>${entry.getValue}</td>
-            <td>${entry.translation}</td>
-            <td>
-                <a href="/edit/${entry.id}">edit</a>
-                <a href="/delete/${entry.id}">delete</a>
-            </td>
-        </tr>
-    </c:forEach>
+
+    <tr th:each="lst : ${result}">
+        <td th:utext="${lst}">brand</td>
+
+    </tr>
+
 </table>
 
 <div>

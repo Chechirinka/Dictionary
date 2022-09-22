@@ -2,6 +2,7 @@ package ru.mmtr.dictionarySpring.model;
 
 public class DictionaryLine {
 
+    private String splitChar = ":";
 
     public DictionaryLine() {
     }
@@ -27,6 +28,11 @@ public class DictionaryLine {
 
     public String getValue() {
         return value;
+    }
+
+    @Override
+    public String toString() {
+        return key + ":" + value;
     }
 
 }
