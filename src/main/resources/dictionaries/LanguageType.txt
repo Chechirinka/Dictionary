@@ -1,1 +1,4 @@
-English, Russian, 
+English, Russian, [a-zA-Z], [A-Я], dictionaries/EnglishRussian.txt
+Russian, English, [A-Я], [a-zA-Z],  dictionaries/RussianEnglish.txt
+English, Digital, [a-zA-Z], [0-9], dictionaries/EnglishDigital.txt
+Digital, English, [0-9], [a-zA-Z],  dictionaries/DigitalEnglish.txt

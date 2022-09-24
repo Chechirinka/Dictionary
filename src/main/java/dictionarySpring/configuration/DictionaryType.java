@@ -6,8 +6,8 @@ import dictionarySpring.exception.TypeNotFoundException;
  * Перечисление, которое отвечает за хранение типов словарей
  */
 public enum DictionaryType {
-    DICTIONARY_ONE(1, "^[a-zA-Z]{4}$", "[a-zA-Z]+", "dictionaries/DictionaryE.txt", "English"),
-    DICTIONARY_TWO(2, "^[0-9]{5}$", "[a-zA-Z]+", "dictionaries/DictionaryD.txt", "Digital");
+    DICTIONARY_ONE(1, "^[a-zA-Z]{4}$", "[a-zA-Z]+", "dictionaries/EnglishRussian.txt", "English"),
+    DICTIONARY_TWO(2, "^[0-9]{5}$", "[a-zA-Z]+", "dictionaries/DigitalEnglish.txt", "Digital");
 
     private static final String LANGUAGE_NOT_EXIST = "Ошибка, такого словаря нет";
     private final Integer number;

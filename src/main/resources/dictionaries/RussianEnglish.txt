@@ -1,0 +1,3 @@
+mashina:car
+kukla:doll
+stol:table
