@@ -14,12 +14,14 @@ public enum DictionaryType {
     private final String patternKey;
     private final String patternValue;
     private final String dictionaryPath;
+    private final String dictionaryName;
 
     DictionaryType(Integer number, String patternKey, String patternValue, String dictionaryPath, String dictionaryName) {
         this.number = number;
         this.patternKey = patternKey;
         this.patternValue = patternValue;
         this.dictionaryPath = dictionaryPath;
+        this.dictionaryName = dictionaryName;
     }
 
     public static DictionaryType getDictionaryTypeByNumber(Integer number) throws TypeNotFoundException {
@@ -46,6 +48,8 @@ public enum DictionaryType {
     public String getDictionaryPath() {
         return dictionaryPath;
     }
+
+    public String getDictionaryName() {return dictionaryName;}
 }
 
 

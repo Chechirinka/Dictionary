@@ -18,7 +18,6 @@ public class DictionaryService implements DictionaryStorage{
     private final Validator validator;
     private final DictionaryStorage dictionaryStorage;
 
-
     @Autowired
     public DictionaryService(Validator validator, DictionaryStorage dictionaryStorage) {
         this.validator = validator;

@@ -118,7 +118,6 @@ public class ActionController {
     public String startLib(){
         return "/menu-controller/action-menu/?dictionaryId=";
     }
-
 }
 
 

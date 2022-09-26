@@ -27,4 +27,10 @@ public class DictionaryLine {
     public String getValue() {
         return value;
     }
+
+    @Override
+    public String toString() {
+        return key + ":" + value;
+    }
+
 }
