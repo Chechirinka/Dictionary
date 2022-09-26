@@ -16,7 +16,7 @@
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
-                            <mainClass>dictionarySpring.DictionaryTest</mainClass>
+                            <mainClass>ru.mmtr.dictionarySpring.DictionaryTest</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>

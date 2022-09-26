@@ -1,10 +1,9 @@
-package dictionarySpring.service;
+package ru.mmtr.dictionarySpring.service;
 
-import dictionarySpring.configuration.DictionaryName;
-import dictionarySpring.model.DictionaryLine;
-import dictionarySpring.storage.*;
-import dictionarySpring.validator.Validator;
-import dictionarySpring.view.Formation;
+import ru.mmtr.dictionarySpring.configuration.DictionaryName;
+import ru.mmtr.dictionarySpring.model.DictionaryLine;
+import ru.mmtr.dictionarySpring.storage.*;
+import ru.mmtr.dictionarySpring.validator.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

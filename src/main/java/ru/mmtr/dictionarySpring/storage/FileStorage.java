@@ -1,8 +1,8 @@
-package dictionarySpring.storage;
+package ru.mmtr.dictionarySpring.storage;
 
-import dictionarySpring.configuration.DictionaryName;
-import dictionarySpring.model.DictionaryLine;
-import dictionarySpring.service.DictionaryLineCodec;
+import ru.mmtr.dictionarySpring.configuration.DictionaryName;
+import ru.mmtr.dictionarySpring.model.DictionaryLine;
+import ru.mmtr.dictionarySpring.service.DictionaryLineCodec;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.*;
@@ -15,6 +15,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
  * Класс отвечающий за хранение словаря в файловой системе
  */
 public class FileStorage implements DictionaryStorage {
+
  @Autowired
     private DictionaryLineCodec dictionaryLineCodec;
 
@@ -26,13 +27,6 @@ public class FileStorage implements DictionaryStorage {
         }
     }
 
-    /**
-     * Метод, который отвечает за запись в файл
-     *
-     * @param key   - ключ
-     * @param value - значение
-     * @param path  - принимает путь
-     */
     private void write(String key, String value, String path, boolean isWrite) throws IOException {
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(path, UTF_8, isWrite))) {
@@ -41,12 +35,6 @@ public class FileStorage implements DictionaryStorage {
         }
     }
 
-    /**
-     * Метод, который отвечает за доступ к чтению из файла
-     *
-     * @param path - принимает путь
-     * @return - возвращает список <ключ,значение>
-     */
     private List<DictionaryLine> operationRead(String path) {
 
         List<DictionaryLine> results = new LinkedList<>();
@@ -61,25 +49,11 @@ public class FileStorage implements DictionaryStorage {
         return results;
     }
 
-    /**
-     * Метод, который отвечает за чтение данных из файла
-     *
-     * @param selectedDictionary - принимает вид языка с которым работает
-     * @return mapRead - возвращает список пар <ключ, значение>
-     */
     @Override
     public List<DictionaryLine> read(DictionaryName selectedDictionary) {
         return operationRead(selectedDictionary.getPath());
     }
 
-    /**
-     * Метод, который отвечает за добавление данных в файл
-     *
-     * @param key                - ключ
-     * @param value              - значение
-     * @param selectedDictionary - принимает вид языка с которым работает
-     * @return логическое значение
-     */
     @Override
     public boolean add(String key, String value, DictionaryName selectedDictionary) {
         try {
@@ -91,12 +65,6 @@ public class FileStorage implements DictionaryStorage {
         return true;
     }
 
-    /***
-     * Метод, который отвечает за удаление данных из файла
-     * @param key - ключ
-     * @param selectedDictionary - принимает вид языка с которым работает
-     * @return логическое значение
-     */
     @Override
     public boolean remove(String key, DictionaryName selectedDictionary) {
         boolean isRemoved = false;
@@ -119,15 +87,6 @@ public class FileStorage implements DictionaryStorage {
         }
         return true;
     }
-
-    /**
-     * Метод, который отвечает за поиск данных в файле
-     *
-     * @param key                - ключ
-     * @param selectedDictionary - принимает вид языка с которым работает
-     * @return mapRead - возвращает список пар <ключ, значение> и если ключ не найден
-     * возвращается null
-     */
 
     @Override
     public DictionaryLine search(String key, DictionaryName selectedDictionary){

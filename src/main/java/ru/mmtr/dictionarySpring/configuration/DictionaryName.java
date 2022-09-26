@@ -1,13 +1,13 @@
-package dictionarySpring.configuration;
+package ru.mmtr.dictionarySpring.configuration;
 
-import dictionarySpring.exception.TypeNotFoundException;
+import ru.mmtr.dictionarySpring.exception.TypeNotFoundException;
 
 /**
  * Перечисление, которое отвечает за хранение типов словарей
  */
 public enum DictionaryName {
-    ENGLISH(1, "^[a-zA-Z]{4}$", "[a-zA-Z]+", "src/main/resources/DictionaryE.txt"),
-    DIGITAL(2, "^[0-9]{5}$", "[a-zA-Z]+", "src/main/resources/DictionaryD.txt");
+    ENGLISH(1, "^[a-zA-Z]{4}$", "[a-zA-Z]+", "E:\\DictionaryEnglish.txt"),
+    DIGITAL(2, "^[0-9]{5}$", "[a-zA-Z]+", "E:\\DictionaryDigital.txt");
 
     private static final String LANGUAGE_NOT_EXIST = "Ошибка, такого словаря нет";
     private final Integer dictionaryKey;
@@ -28,7 +28,7 @@ public enum DictionaryName {
                 return dictionaryName;
             }
         }
-        throw new TypeNotFoundException(LANGUAGE_NOT_EXIST);
+        throw new TypeNotFoundException(LANGUAGE_NOT_EXIST + number);
     }
 
     public Integer getDictionaryKey() {

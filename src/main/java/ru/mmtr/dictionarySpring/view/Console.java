@@ -1,9 +1,9 @@
-package dictionarySpring.view;
+package ru.mmtr.dictionarySpring.view;
 
-import dictionarySpring.configuration.DictionaryName;
-import dictionarySpring.exception.TypeNotFoundException;
-import dictionarySpring.model.DictionaryLine;
-import dictionarySpring.service.DictionaryService;
+import ru.mmtr.dictionarySpring.configuration.DictionaryName;
+import ru.mmtr.dictionarySpring.exception.TypeNotFoundException;
+import ru.mmtr.dictionarySpring.model.DictionaryLine;
+import ru.mmtr.dictionarySpring.service.DictionaryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -13,7 +13,7 @@ import java.util.Scanner;
 
 @Component
 public class Console {
-    public final static String NO_EXIST_KEY = "Ключ не найден";
+    private final static String NO_EXIST_KEY = "Ключ не найден";
     private final static String SELECT_LANGUAGE = "Select lang: 1 - English; 2 - Digital;";
     private final static String SELECT_ACTIONS = "Enter action: 1-add; 2 - read; 3 - remove; 4 - search; 5-exit";
     private final static String ENTER_KEY = "Enter key";
@@ -33,14 +33,12 @@ public class Console {
 
     private DictionaryService dictionaryService;
     private DictionaryName selectedDictionary;
-
-    @Autowired
     private Formation formation;
 
 
     @Autowired
-    public Console(DictionaryService dictionaryService) {
-
+    public Console(DictionaryService dictionaryService, Formation formation) {
+        this.formation = formation;
         this.dictionaryService = dictionaryService;
     }
 
@@ -111,12 +109,12 @@ public class Console {
     }
 
     private String searchPair(String key, DictionaryName selectedDictionary) {
-        
+
         DictionaryLine line = dictionaryService.search(key, selectedDictionary);
         if (line == null) {
-            return formation.castToString(dictionaryService.search(key, selectedDictionary));
+            return NO_EXIST_KEY;
         }
-        return NO_EXIST_KEY;
+        return formation.castToString(dictionaryService.search(key, selectedDictionary));
     }
 
     private String removePair(String key, DictionaryName selectedDictionary) {

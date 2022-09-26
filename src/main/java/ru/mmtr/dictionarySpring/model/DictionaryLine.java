@@ -1,7 +1,4 @@
-package dictionarySpring.model;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+package ru.mmtr.dictionarySpring.model;
 
 
 public class DictionaryLine {
